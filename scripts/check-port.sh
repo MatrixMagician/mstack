@@ -41,7 +41,7 @@ fi
 for entry in "${PATTERNS[@]}"; do
   pat="${entry%%	*}"; rest="${entry#*	}"; desc="${rest%%	*}"
   extra=(); [ "$rest" != "$desc" ] && read -r -a extra <<< "${rest#*	}"
-  hits=$(git grep -nIE "$pat" -- . "${EXCLUDE[@]}" "${extra[@]}" 2>/dev/null)
+  hits=$(git grep --untracked -nIE "$pat" -- . "${EXCLUDE[@]}" "${extra[@]}" 2>/dev/null)
   if [ -n "$hits" ]; then
     fail=1
     printf '\n\033[31mFAIL\033[0m %s\n' "$desc"

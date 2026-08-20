@@ -4,7 +4,7 @@
     "name": "Oliver H."
   },
   "metadata": {
-    "description": "rigorous agent workflows you can parallelize with confidence. a Claude Code port of pstack."
+    "description": "rigorous agent workflows you can parallelize with confidence."
   },
   "plugins": [
     {
