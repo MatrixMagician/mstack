@@ -44,7 +44,7 @@ Launch all reviewers in a single message using the Task tool. Use the `interroga
 The three seats are one family, so the rubric differentiation in `references/rubric.md` is carrying more weight here than it did upstream, where seats came from different labs. Keep the personas sharply distinct, keep the tiers spread, and vary `effort` as shown. A panel of three identical seats is one reviewer with extra steps.
 
 For each reviewer:
-- `subagent_type`: `generalPurpose`
+- `subagent_type`: `general-purpose`
 - `model`: the configured `interrogate reviewers` entry, or the table default with no configured line
 - Read-only posture: instruct it to read and report, never write. Claude Code has no readonly flag, so the constraint lives in the prompt.
 

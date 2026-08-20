@@ -91,5 +91,12 @@ Reads the scratch directory's newest transcript and reports which skills genuine
 and `model`. Exits non-zero when nothing fired. The transcript format it relies on is documented
 in [`skills/poteto-mode/references/transcripts.md`](../skills/poteto-mode/references/transcripts.md).
 
-Record the result for each numbered test. Until all seven pass, the port is validated statically
-only — every component registers, but no workflow is proven to behave.
+Record the result for each numbered test.
+
+**Last run: 2026-08-20 — all seven PASS.** That run found three defects every static gate had
+passed: `/poteto-mode` registered as `/mstack:Poteto Mode` (a human display name in frontmatter),
+the upstream camelCase spelling of `general-purpose` surviving in nine places the gate had no pattern for, and `poteto-agent` unable to
+locate the skill it is named for — degrading silently while still answering plausibly.
+
+Re-run this checklist after any change to skill frontmatter, agent definitions, or model roles.
+Those are exactly the surfaces where a change passes every static gate and still breaks invocation.
