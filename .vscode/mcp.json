@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "graphmind": {
+      "args": [
+        "mcp"
+      ],
+      "command": "/home/oliverh/.local/bin/graphmind",
+      "type": "stdio"
+    }
+  }
+}

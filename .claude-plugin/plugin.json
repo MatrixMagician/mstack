@@ -1,0 +1,21 @@
+{
+  "name": "mstack",
+  "displayName": "mstack",
+  "version": "0.1.0",
+  "description": "if you want to go fast, go deep first. mstack helps you write less, but higher quality code. rigorous agent workflows you can parallelize with confidence.",
+  "author": {
+    "name": "Oliver H."
+  },
+  "homepage": "https://github.com/MatrixMagician/mstack",
+  "repository": "https://github.com/MatrixMagician/mstack",
+  "license": "MIT",
+  "keywords": [
+    "mstack",
+    "poteto-mode",
+    "workflow",
+    "principles",
+    "agent-style",
+    "subagents",
+    "unslop"
+  ]
+}

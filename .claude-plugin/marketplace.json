@@ -1,0 +1,16 @@
+{
+  "name": "mstack",
+  "owner": {
+    "name": "Oliver H."
+  },
+  "metadata": {
+    "description": "rigorous agent workflows you can parallelize with confidence."
+  },
+  "plugins": [
+    {
+      "name": "mstack",
+      "source": "./",
+      "description": "if you want to go fast, go deep first. mstack helps you write less, but higher quality code."
+    }
+  ]
+}
