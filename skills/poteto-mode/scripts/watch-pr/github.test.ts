@@ -192,7 +192,7 @@ describe("closed enum parsing", () => {
   });
 });
 
-it("annotates Bugbot threads with distinct review-pass counts", () => {
+it("annotates review-bot threads with distinct review-pass counts", () => {
   const response = {
     data: {
       repository: {
@@ -209,7 +209,7 @@ it("annotates Bugbot threads with distinct review-pass counts", () => {
                       createdAt: "now",
                       path: "a.ts",
                       line: 1,
-                      author: { login: "bugbot" },
+                      author: { login: "review-bot" },
                     },
                   ],
                 },
@@ -220,11 +220,11 @@ it("annotates Bugbot threads with distinct review-pass counts", () => {
                 comments: {
                   nodes: [
                     {
-                      body: "CURSOR_AUTOMATION_ID: run-2 severity high",
+                      body: "AUTOMATION_ID: run-2 severity high",
                       createdAt: "now",
                       path: null,
                       line: null,
-                      author: { login: "cursor" },
+                      author: { login: "claude-code-action[bot]" },
                     },
                   ],
                 },
@@ -239,7 +239,7 @@ it("annotates Bugbot threads with distinct review-pass counts", () => {
                       createdAt: "now",
                       path: null,
                       line: null,
-                      author: { login: "bugbot" },
+                      author: { login: "review-bot" },
                     },
                   ],
                 },
@@ -252,8 +252,35 @@ it("annotates Bugbot threads with distinct review-pass counts", () => {
   };
   const threads = parseReviewThreads(response);
   expect(threads).toHaveLength(2);
-  expect(threads.map((thread) => thread.isBugbot)).toEqual([true, true]);
-  expect(threads.map((thread) => thread.bugbotReviewPasses)).toEqual([3, 3]);
+  expect(threads.map((thread) => thread.isReviewBot)).toEqual([true, true]);
+  expect(threads.map((thread) => thread.reviewBotPasses)).toEqual([3, 3]);
+});
+
+it("recognises review bots by login suffix and by review vocabulary", () => {
+  const thread = (login: string, body: string) => ({
+    id: login,
+    isResolved: false,
+    comments: {
+      nodes: [{ body, createdAt: "now", path: null, line: null, author: { login } }],
+    },
+  });
+  const response = {
+    data: {
+      repository: {
+        pullRequest: {
+          reviewThreads: {
+            nodes: [
+              thread("coderabbitai[bot]", "RUN_ID: r1"),
+              thread("some-reviewer[bot]", "severity: medium"),
+              thread("a-human", "severity: medium"),
+            ],
+          },
+        },
+      },
+    },
+  };
+  const threads = parseReviewThreads(response);
+  expect(threads.map((t) => t.isReviewBot)).toEqual([true, true, false]);
 });
 
 describe("context and stack discovery", () => {

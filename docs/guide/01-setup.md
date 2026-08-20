@@ -1,38 +1,39 @@
-# Set up pstack
+# Set up mstack
 
-In this page you install the plugin, pick which models pstack uses, and run your first task. Setup is one command plus a short conversation.
+In this page you install the plugin and run your first task. There is no model configuration step: every skill names a Claude Code tier alias inline, and aliases track the current release.
 
 ## Install the plugin
 
-In a Cursor chat, run:
+In Claude Code, run:
 
 ```text
-/add-plugin pstack
+/plugin marketplace add MatrixMagician/mstack
+/plugin install mstack
 ```
 
-Cursor confirms the plugin is installed.
+Claude Code confirms the plugin is installed, and every skill appears under the `mstack:` namespace. To try a local checkout instead, start Claude Code with `claude --plugin-dir /path/to/mstack`.
 
-## Pick your models
+## Models, and why there's nothing to pick
 
-Run:
+Each skill names its own model per role: `sonnet` for code, `opus` for precisely-specified sequences, `fable` for prose and judgment, `haiku` for cheap fan-out, and a `fable` / `opus` / `sonnet` panel for reviews. These are tier aliases rather than pinned versions, so they follow the current release of each tier and never go stale.
+
+If you do want to override a role, write `.claude/rules/mstack-models.md` with one line per role:
 
 ```text
-/setup-pstack
+swarm workers: haiku
+arena runners: fable, opus, sonnet
+interrogate reviewers: fable, opus, sonnet
 ```
 
-[`/setup-pstack`](../../skills/setup-pstack/SKILL.md) detects the models you have access to, shows you each role (code delegates, judgment, the review panels), and asks what you want. Answer the questions. It writes `~/.cursor/rules/pstack-models.mdc`, a small rule every pstack skill reads.
+You only override what you care about. A role with no line keeps the skill's default; delete a line to restore it. Set a role to `inherit-parent` or `auto` and mstack omits the subagent `model` field, so the subagent inherits your parent chat model. Both values mean the same thing, and neither is a model name. For a panel role the value is a list, and one subagent runs per entry, so the list length sets the panel size.
 
-You only override what you care about. A role with no line in the rule keeps the skill's default. To restore a default later, delete that role's line, or just run `/setup-pstack` again.
+One caveat carried over from upstream: mstack's panels all draw on one model family, so they cannot rely on different labs having different blind spots. Keep any override spread across tiers rather than collapsing a panel onto a single one.
 
-You might be wondering what happens if you use Auto. Set a role to `inherit-parent` or `auto` and pstack omits the subagent `model` field, so the subagent inherits your parent chat model. Both values mean the same thing, and neither is a model slug. For a panel role the value is a list, and one subagent runs per entry, so the list length sets the panel size. Setup also configures `swarm workers`, the default model for every `/swarm` worker unless a race names a model for each arm.
+## Set up a way to prove app behavior
 
-## Accept the verification offer, or don't
+mstack's verification skills assume your project has some scripted way to drive the real app. If yours has neither a `verify-*` skill nor an existing harness, run [`/create-verification-skill`](../../skills/create-verification-skill/SKILL.md).
 
-At the end of setup, `/setup-pstack` looks for a way to prove app behavior in your project, either a `verify-*` skill or an existing harness. If it finds neither, it offers once to generate one with [`/create-verification-skill`](../../skills/create-verification-skill/SKILL.md).
-
-Say yes and it writes `.cursor/skills/verify-<app>/`, a project-local skill that teaches agents to drive your app the way a user does. It proves the skill works once before handing it over. Say no and setup moves on. You can run `/create-verification-skill` yourself any time. [Verify and ship](./06-verify-and-ship.md#create-a-project-verification-skill) covers when it earns its place.
-
-After setup, start a new chat. The model rule applies to new sessions.
+It writes `.claude/skills/verify-<app>/`, a project-local skill that teaches agents to drive your app the way a user does, and proves the skill works once before handing it over. [Verify and ship](./06-verify-and-ship.md#create-a-project-verification-skill) covers when it earns its place.
 
 ## Run your first task
 

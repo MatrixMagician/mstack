@@ -8,18 +8,20 @@ cd "$(dirname "$0")/.."
 EXCLUDE=(':(exclude)LICENSES/*' ':(exclude)NOTICE.md' ':(exclude)SPEC.md'
          ':(exclude)scripts/check-port.sh' ':(exclude)AGENTS.md' ':(exclude)docs/agents/*')
 
-# pattern<TAB>description. ERE, case-sensitive unless the pattern says otherwise.
+# pattern<TAB>description<TAB>extra path exclusions (space separated, optional).
+# README.md is exempt from the three attribution patterns only: naming the upstream project
+# is what a NOTICE is for. It stays subject to every other pattern.
 PATTERNS=(
-  '[Cc]ursor|CURSOR	Cursor references (§11.3)'
+  '\b[Cc]ursor\b|CURSOR	Cursor references (§11.3, endCursor is a GraphQL field and exempt)	:(exclude)README.md'
   'gpt-|grok	non-Anthropic model slugs (§5)'
   '[Bb]ugbot	Bugbot-specific mechanics (§6)'
   'benny	benny automations (§10, deleted)'
-  'cursor-team-kit	external plugin attribution (§9)'
+  'cursor-team-kit	external plugin attribution (§9)	:(exclude)README.md'
   '\.mdc	Cursor rule-file extension (§4)'
   '(^|[^[:alnum:]_-])AskQuestion	bare AskQuestion, want AskUserQuestion (§6)'
   'is_background	Cursor agent frontmatter, want background (§3)'
   'environment: *"?cloud	Cursor cloud execution (§8)'
-  'pstack	old plugin name (§2)'
+  '\bpstack\b	old plugin name (§2)	:(exclude)README.md'
 )
 
 fail=0
@@ -37,8 +39,9 @@ else
 fi
 
 for entry in "${PATTERNS[@]}"; do
-  pat="${entry%%	*}"; desc="${entry#*	}"
-  hits=$(git grep -nIE "$pat" -- . "${EXCLUDE[@]}" 2>/dev/null)
+  pat="${entry%%	*}"; rest="${entry#*	}"; desc="${rest%%	*}"
+  extra=(); [ "$rest" != "$desc" ] && read -r -a extra <<< "${rest#*	}"
+  hits=$(git grep -nIE "$pat" -- . "${EXCLUDE[@]}" "${extra[@]}" 2>/dev/null)
   if [ -n "$hits" ]; then
     fail=1
     printf '\n\033[31mFAIL\033[0m %s\n' "$desc"
