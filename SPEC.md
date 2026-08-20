@@ -251,7 +251,19 @@ These restore the shipping playbook's invariant — *live surface verification i
 
    **Correction: these cannot be run headlessly.** 39 of the 46 skills are `disable-model-invocation: true`, and `claude -p` has no slash-command mechanism, so it can reach only 7 of them — excluding every item on this list except `/deslop` and `/control-cli`. Worse, the failure is silent: a headless `/bro` prompt produced correct, perfectly `/bro`-shaped prose while the transcript recorded no `Skill` tool call at all. Grading on output shape scores that a pass. `claude plugin eval` is the right tool and would remove the manual pass entirely, but is early-access gated.
 
-   **Status: not run.** Each needs a live interactive session with real model spend, so it cannot be discharged by static verification. The plugin loads and every component registers (§11.2), but whether the workflows *behave* is unproven and remains the largest open risk in the port.
+   **Status: all seven PASS**, run 2026-08-20 by driving an interactive session through a tmux harness and grading every one on the transcript (`scripts/verify-smoke.sh`), never on the reply. Evidence per test:
+
+   | # | Skill | Evidence |
+   |---|---|---|
+   | 1 | `/poteto-mode` | `attributionSkill` ×19; `sum.js` 6→10; red-first commits (test, then fix) |
+   | 2 | `/arena` | candidates on `fable` + `opus`, cross-judge on `fable` after both finished; isolated candidate dirs |
+   | 3 | `/swarm` | `general-purpose` × `haiku` × `isolation: worktree` ×2; parent re-verified and downgraded a worker's PASS |
+   | 4 | `/create-verification-skill` | wrote `.claude/skills/verify-<app>/` with the four specified H2s; self-proved the skill |
+   | 5 | `/deslop` | `attributionSkill` ×9; slop removed, behaviour preserved |
+   | 6 | `/no-comments` | `attributionSkill` ×7; `Comment Sicko` subagent spawned |
+   | 7 | `/control-cli` | PTY harness built, corroborated against a non-TTY pipe; cleaned up after itself |
+
+   **Three defects were found, all of which had passed every static gate** (see the port's git history): `/poteto-mode` was an unknown command because the skill carried a human display name; `generalPurpose` survived in 9 places the gate had no pattern for; and `poteto-agent` could not locate the skill it is named for, degrading silently while still answering plausibly. Tests 2 and 3 are the first real evidence that §5's tier-diversity mitigation produces genuinely different models per seat rather than a collapsed panel. The plugin loads and every component registers (§11.2), but whether the workflows *behave* is unproven and remains the largest open risk in the port.
 
 5. Bundled TypeScript: `bun test orch watch-pr` and `tsc --project watch-pr/tsconfig.json --noEmit --strict` both clean. The nested `package.json` means Claude Code's automatic dependency install does not fire, so `bun install` is a manual first step. Baseline 52 tests; 53 after the review-bot generalisation.
 
