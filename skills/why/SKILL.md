@@ -116,7 +116,7 @@ Aim for a complete **coverage map**, not a minimal one. A null result from an is
 Launch all matching investigators in a single message so they run concurrently. One investigator per category lets each specialize in one tool's query vocabulary and result shape. Don't ask one agent to cover multiple MCPs.
 
 Subagent config (each):
-- `subagent_type`: `generalPurpose`
+- `subagent_type`: `general-purpose`
 - `model`: your configured why-investigators model (default `haiku`)
 - Investigators still shouldn't write anything. That's a posture stated in the prompt, not a sandbox.
 
@@ -162,7 +162,7 @@ If your scope assessment suggests a single-commit trivial target where the PR de
 
 Spawn one synthesizer subagent:
 
-- `subagent_type`: `generalPurpose`
+- `subagent_type`: `general-purpose`
 - `model`: your configured why-synthesizer model (default `fable`)
 
 The synthesizer gets:

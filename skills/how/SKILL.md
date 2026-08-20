@@ -44,7 +44,7 @@ The right decomposition depends on the question. Use your judgment. Narrow quest
 
 Spawn all explorers in a single message:
 
-- `subagent_type`: `generalPurpose`
+- `subagent_type`: `general-purpose`
 - `model`: your configured how-explorer model (default `sonnet`)
 - Read-only posture: instruct it to read and report, never write. Claude Code has no readonly flag, so the constraint lives in the prompt.
 
@@ -63,7 +63,7 @@ Then proceed to Step 3.
 
 Spawn a single Task subagent that explores and explains in one pass:
 
-- `subagent_type`: `generalPurpose`
+- `subagent_type`: `general-purpose`
 - `model`: your configured how-explainer model (default `fable`)
 - Read-only posture: instruct it to read and report, never write. Claude Code has no readonly flag, so the constraint lives in the prompt.
 
@@ -75,7 +75,7 @@ Proceed to Step 4.
 
 Once all explorers return, spawn a single Task subagent to synthesize their findings into one coherent explanation:
 
-- `subagent_type`: `generalPurpose`
+- `subagent_type`: `general-purpose`
 - `model`: your configured how-explainer model (default `fable`)
 - Read-only posture: instruct it to read and report, never write. Claude Code has no readonly flag, so the constraint lives in the prompt.
 
@@ -112,7 +112,7 @@ Run the full explain flow above (Steps 1-4). You must understand the architectur
 After the explanation is complete, spawn one architectural critic per model in your configured how-critics list (defaults `fable`, `opus`, `sonnet` — three seats, one per tier), all in a single message. The seats share a model family, so their independence comes from tier, `effort`, and the distinct critical lens each prompt assigns; do not collapse them onto one tier.
 
 For each critic:
-- `subagent_type`: `generalPurpose`
+- `subagent_type`: `general-purpose`
 - `model`: one model from the configured how-critics list. These are minimum reasoning levels. The lead should escalate any model when the architecture warrants deeper analysis.
 - Read-only posture: instruct it to read and report, never write. Claude Code has no readonly flag, so the constraint lives in the prompt.
 

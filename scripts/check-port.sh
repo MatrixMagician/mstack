@@ -20,6 +20,8 @@ PATTERNS=(
   '\.mdc	Cursor rule-file extension (§4)'
   '(^|[^[:alnum:]_-])AskQuestion	bare AskQuestion, want AskUserQuestion (§6)'
   'is_background	Cursor agent frontmatter, want background (§3)'
+  'generalPurpose	Cursor subagent_type, want general-purpose (§6)'
+  'run_in_background	Cursor Task param with no Claude Code equivalent (§6)'
   'environment: *"?cloud	Cursor cloud execution (§8)'
   '\bpstack\b	old plugin name (§2)	:(exclude)README.md'
 )
