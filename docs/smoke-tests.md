@@ -71,7 +71,7 @@ Run `scripts/verify-smoke.sh` from the scratch repo after **each** prompt.
 | 1 | `/poteto-mode sum.js drops the last element. repro first, then fix and verify.` | First todo is "read the Principles section"; the Bug-fix playbook's steps are copied in verbatim; a skipped step stays listed as `skip: <reason>`; the fix is proven by running it, not asserted |
 | 2 | `/arena two designs for a safer sumAll. compare them.` | Three runners on `fable`, `opus`, `sonnet` — not three of one tier; each writes to its own path; a cross-judge runs after all candidates finish, not alongside |
 | 3 | `/swarm check both js files for off-by-ones. one worker each.` | Workers spawn on `haiku` with `isolation: "worktree"`; one aggregated verdict |
-| 4 | `/create-verification-skill` | Writes to `.claude/skills/verify-<app>/`, **never** `.cursor/`; produces a feature map |
+| 4 | `/create-verification-skill` | Writes to `.claude/skills/verify-<app>/` and nowhere else — the upstream skill targeted an editor-specific directory, so confirm the path rather than assuming the remap took; produces a feature map |
 | 5 | `/deslop sloppy.js` | Narrating comments, unsupported guards and the dead `addLegacy` path are gone; `add`'s behaviour is unchanged |
 | 6 | `/no-comments sloppy.js` | A `comment-sicko` subagent spawns |
 | 7 | `/control-cli` against any local TUI | Drives it through the tmux harness; installs nothing unsolicited |

@@ -247,6 +247,10 @@ These restore the shipping playbook's invariant — *live surface verification i
      one local variable in `github.ts` is renamed, so the gate needs no allowlist mechanism at all.
 4. Smoke tests: `/poteto-mode` on a trivial bug-fix in a scratch repo end to end; `/arena` with the three-seat panel; `/swarm` spawning haiku workers in background worktrees; `/create-verification-skill` writing to `.claude/skills/`; `/deslop` and `/no-comments` on a deliberately sloppy diff; `/control-cli` against a sample TUI via the tmux harness.
 
+   Procedure, scratch-repo setup and per-test pass criteria: `docs/smoke-tests.md`. Verify each with `scripts/verify-smoke.sh`, which grades on the transcript rather than the reply.
+
+   **Correction: these cannot be run headlessly.** 39 of the 46 skills are `disable-model-invocation: true`, and `claude -p` has no slash-command mechanism, so it can reach only 7 of them — excluding every item on this list except `/deslop` and `/control-cli`. Worse, the failure is silent: a headless `/bro` prompt produced correct, perfectly `/bro`-shaped prose while the transcript recorded no `Skill` tool call at all. Grading on output shape scores that a pass. `claude plugin eval` is the right tool and would remove the manual pass entirely, but is early-access gated.
+
    **Status: not run.** Each needs a live interactive session with real model spend, so it cannot be discharged by static verification. The plugin loads and every component registers (§11.2), but whether the workflows *behave* is unproven and remains the largest open risk in the port.
 
 5. Bundled TypeScript: `bun test orch watch-pr` and `tsc --project watch-pr/tsconfig.json --noEmit --strict` both clean. The nested `package.json` means Claude Code's automatic dependency install does not fire, so `bun install` is a manual first step. Baseline 52 tests; 53 after the review-bot generalisation.
