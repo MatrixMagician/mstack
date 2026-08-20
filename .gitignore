@@ -1,3 +1,7 @@
 node_modules/
 .DS_Store
 *.log
+
+# Personal editor / tooling config — never ship in the plugin payload
+.vscode/
+.rtk/

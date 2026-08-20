@@ -18,9 +18,9 @@ containing one:
 
 | cwd | directory |
 |---|---|
-| `/home/you/proj` | `-home-you-proj` |
-| `/home/you/.config/app` | `-home-you--config-app` |
-| `/home/you/.npm/_npx/abc/node_modules/x` | `-home-you--npm--npx-abc-node-modules-x` |
+| `/home/<user>/proj` | `-home-<user>-proj` |
+| `/home/<user>/.config/app` | `-home-<user>--config-app` |
+| `/home/<user>/.npm/_npx/abc/node_modules/x` | `-home-<user>--npm--npx-abc-node-modules-x` |
 
 Derive it rather than assembling it by hand:
 

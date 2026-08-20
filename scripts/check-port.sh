@@ -21,6 +21,7 @@ PATTERNS=(
   '(^|[^[:alnum:]_-])AskQuestion	bare AskQuestion, want AskUserQuestion (§6)'
   'is_background	Cursor agent frontmatter, want background (§3)'
   'generalPurpose	Cursor subagent_type, want general-purpose (§6)'
+  '/(home|Users)/[a-z]	hardcoded personal home path (leaks a username to every installer)'
   'run_in_background	Cursor Task param with no Claude Code equivalent (§6)'
   'environment: *"?cloud	Cursor cloud execution (§8)'
   '\bpstack\b	old plugin name (§2)	:(exclude)README.md'
