@@ -14,8 +14,8 @@ import {
 import {
   runQueued,
   runSimple,
-  statusQueryVerdict,
-  verdictFactory,
+  statusQueryEvent,
+  eventFactory,
   type WatchClock,
 } from "./policy.ts";
 import { renderJson, renderPretty } from "./render.ts";
@@ -127,7 +127,7 @@ export function parseArgs(
       5
     )
     .option("--status-only", "print one status table and exit 0", false)
-    .option("--allow-draft", "do not treat a draft as a merge gate", false)
+    .option("--allow-draft", "do not treat a draft as a blocker", false)
     .option("--pretty", "render human text instead of JSON", false);
   program.parse(argv, { from: "user" });
   const raw = program.opts<RawOptions>();
@@ -182,8 +182,8 @@ export async function main(
     return error.exitCode === 0 ? 0 : 64;
   }
   const render = options.pretty ? renderPretty : renderJson;
-  const emit = (verdict: T.ProgressVerdict): void =>
-    runtime.stdout(render(verdict));
+  const emit = (event: T.ProgressEvent): void =>
+    runtime.stdout(render(event));
   let contexts: T.NonEmpty<T.PrContext>;
   try {
     const seed = await resolveContext({
@@ -199,16 +199,16 @@ export async function main(
         : await discoverStack(runtime.reader, seed));
   } catch (error) {
     if (!(error instanceof WatcherQueryError)) throw error;
-    const verdict = statusQueryVerdict(
-      verdictFactory(runtime.clock, options.mode),
+    const event = statusQueryEvent(
+      eventFactory(runtime.clock, options.mode),
       1,
       error.failure
     );
-    runtime.stdout(render(verdict));
-    return verdict.exitCode;
+    runtime.stdout(render(event));
+    return event.exitCode;
   }
   const dependencies = { reader: runtime.reader, clock: runtime.clock, emit };
-  const verdict =
+  const event =
     options.mode === "queued-stack" && !options.statusOnly
       ? await runQueued({ dependencies, contexts, options: options.polling })
       : await runSimple({
@@ -218,6 +218,6 @@ export async function main(
           statusOnly: options.statusOnly,
           options: options.polling,
         });
-  runtime.stdout(render(verdict));
-  return verdict.exitCode;
+  runtime.stdout(render(event));
+  return event.exitCode;
 }

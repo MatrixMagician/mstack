@@ -1,6 +1,6 @@
 import type * as T from "./types.ts";
-export const renderJson = (verdict: T.WatcherVerdict): string =>
-  `${JSON.stringify(verdict)}\n`;
+export const renderJson = (event: T.WatcherEvent): string =>
+  `${JSON.stringify(event)}\n`;
 function ciCell(row: T.PrSnapshot): string {
   if (row.kind !== "open") return "\u2014";
   const was = row.ci.hadPreviousPassingCi ? ", was ✅" : "";
@@ -104,7 +104,7 @@ function renderBlocker(blocker: T.MergeBlocker | StatusQueryBlocker): string {
         ...details,
       ].join("\n");
     }
-    case "merge-gate": {
+    case "merge-ineligible": {
       const action =
         blocker.reason === "closed-without-merge"
           ? "restore or remove the closed PR from the queued stack"
@@ -130,39 +130,39 @@ function renderBlocker(blocker: T.MergeBlocker | StatusQueryBlocker): string {
     }
   }
 }
-export function renderPretty(verdict: T.WatcherVerdict): string {
-  switch (verdict.kind) {
+export function renderPretty(event: T.WatcherEvent): string {
+  switch (event.kind) {
     case "QUEUE":
-      return `QUEUE: captured ${verdict.queue.length} PR${verdict.queue.length === 1 ? "" : "s"} bottom-to-top: ${verdict.queue.map((pr) => `#${pr.number}`).join(",")}\n`;
+      return `QUEUE: captured ${event.queue.length} PR${event.queue.length === 1 ? "" : "s"} bottom-to-top: ${event.queue.map((pr) => `#${pr.number}`).join(",")}\n`;
     case "STATUS":
-      return renderStatusTable(verdict.rows);
+      return renderStatusTable(event.rows);
     case "WAITING":
-      return verdict.reason.kind === "pending-checks"
-        ? `WAITING: frontier=#${verdict.frontier.number}; ${verdict.reason.pending.length} check${verdict.reason.pending.length === 1 ? "" : "s"} pending\n`
-        : `WAITING: frontier=#${verdict.frontier.number} is blocker-free; waiting for merge queue (${verdict.reason.unmergedCount} PR${verdict.reason.unmergedCount === 1 ? "" : "s"} unmerged)\n`;
+      return event.reason.kind === "pending-checks"
+        ? `WAITING: frontier=#${event.frontier.number}; ${event.reason.pending.length} check${event.reason.pending.length === 1 ? "" : "s"} pending\n`
+        : `WAITING: frontier=#${event.frontier.number} is blocker-free; waiting for merge queue (${event.reason.unmergedCount} PR${event.reason.unmergedCount === 1 ? "" : "s"} unmerged)\n`;
     case "ADVANCE":
-      return `ADVANCE: merged #${verdict.merged.number}; next=#${verdict.frontier.number}; remaining=${verdict.remaining}\n`;
+      return `ADVANCE: merged #${event.merged.number}; next=#${event.frontier.number}; remaining=${event.remaining}\n`;
     case "RETRY":
-      return `RETRY: GitHub status query failed; retrying in ${verdict.retryInSeconds}s\ndetail=${verdict.failure.detail}\n`;
+      return `RETRY: GitHub status query failed; retrying in ${event.retryInSeconds}s\ndetail=${event.failure.detail}\n`;
     case "BLOCKER":
-      return `${renderBlocker(verdict.blocker)}\n`;
+      return `${renderBlocker(event.blocker)}\n`;
     case "READY": {
       const detail =
-        verdict.scope.kind === "single" && verdict.scope.pr.kind === "ready-pr"
-          ? `\nmergeStateStatus=${verdict.scope.pr.proof.ci.github.mergeStateStatus}\nreviewDecision=${verdict.scope.pr.proof.gate.reviewDecision}\nisDraft=${verdict.scope.pr.proof.gate.draft === "draft-allowed"}${verdict.scope.pr.proof.gate.draft === "draft-allowed" ? "\nnote=draft allowed (--allow-draft); leave draft \u2014 do not mark ready" : ""}`
+        event.scope.kind === "single" && event.scope.pr.kind === "ready-pr"
+          ? `\nmergeStateStatus=${event.scope.pr.proof.ci.github.mergeStateStatus}\nreviewDecision=${event.scope.pr.proof.eligibility.reviewDecision}\nisDraft=${event.scope.pr.proof.eligibility.draft === "draft-allowed"}${event.scope.pr.proof.eligibility.draft === "draft-allowed" ? "\nnote=draft allowed (--allow-draft); leave draft \u2014 do not mark ready" : ""}`
           : "";
       return `READY: no merge conflicts, no unresolved review threads, no failing or pending checks${detail}\n`;
     }
     case "COMPLETE":
-      return `COMPLETE: queued stack merged (${verdict.queue.length} PR${verdict.queue.length === 1 ? "" : "s"})\n`;
+      return `COMPLETE: queued stack merged (${event.queue.length} PR${event.queue.length === 1 ? "" : "s"})\n`;
     case "TIMEOUT":
-      if (verdict.reason.kind === "pending-checks")
+      if (event.reason.kind === "pending-checks")
         return "TIMEOUT: checks still pending\n";
-      if (verdict.reason.kind === "status-unavailable")
+      if (event.reason.kind === "status-unavailable")
         return "TIMEOUT: GitHub status remained unavailable\n";
-      return `TIMEOUT: queued stack still has ${verdict.reason.unmergedCount} PR${verdict.reason.unmergedCount === 1 ? "" : "s"} unmerged; frontier=#${verdict.reason.frontier.number}\n`;
+      return `TIMEOUT: queued stack still has ${event.reason.unmergedCount} PR${event.reason.unmergedCount === 1 ? "" : "s"} unmerged; frontier=#${event.reason.frontier.number}\n`;
     default: {
-      const exhaustive: never = verdict;
+      const exhaustive: never = event;
       return exhaustive;
     }
   }
