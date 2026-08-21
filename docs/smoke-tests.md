@@ -108,10 +108,13 @@ Record the result for each numbered test.
 
 Two rows of this checklist are wrong, and the run is what surfaced them.
 
-**Row 5 asks for something `deslop` never promised.** Its focus areas are comments, defensive
-checks, `any` casts, and nesting; its guardrail is to keep behavior unchanged with minimal edits.
-Deleting the exported `addLegacy` is an API change, so a compliant run leaves it. Either scope
-dead-path removal into the skill or drop it from the row.
+**Row 5 asked for something `deslop` had never promised.** Its focus areas were comments,
+defensive checks, `any` casts, and nesting, so a compliant run left the exported `addLegacy`
+alone. Resolved by scoping dead paths into the skill rather than dropping the row: `deslop` now
+removes pass-through wrappers and compatibility shims nothing calls, and must search the repo for
+every reference before cutting one. Re-verified on a fresh scratch repo -- it ran
+`grep -rn "addLegacy"` first, then removed the function and its export, leaving `add` identical on
+every probed input.
 
 **Row 6 spelled the agent `comment-sicko`.** It is registered and documented everywhere else as
 `Comment Sicko`, which is what `subagent_type` must match. Fixed in the row above.
