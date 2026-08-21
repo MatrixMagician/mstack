@@ -152,10 +152,10 @@ const ciBlocker = (row: T.PrSnapshot): T.MergeBlocker | null =>
   (row.ci.kind === "ci-failing" || row.ci.kind === "ci-github-rejected")
     ? { kind: "failing-checks", pr: row.context, ci: row.ci }
     : null;
-function gateReason(
+function ineligibleReason(
   row: T.PrSnapshot,
   allowDraft: boolean
-): T.MergeGateReason | null {
+): T.MergeIneligibleReason | null {
   if (row.kind === "merged") return null;
   if (row.kind === "closed") return "closed-without-merge";
   if (row.facts.isDraft && !allowDraft) return "draft-pr";
@@ -163,17 +163,17 @@ function gateReason(
     ? "changes-requested"
     : null;
 }
-function gateBlocker(
+function ineligibleBlocker(
   row: T.PrSnapshot,
   allowDraft: boolean
 ): T.MergeBlocker | null {
-  const reason = gateReason(row, allowDraft);
+  const reason = ineligibleReason(row, allowDraft);
   return reason === null ||
     (reason === "draft-pr" &&
       row.kind === "open" &&
       row.ci.kind === "ci-pending")
     ? null
-    : { kind: "merge-gate", pr: row.context, reason };
+    : { kind: "merge-ineligible", pr: row.context, reason };
 }
 function readyContribution(
   row: T.PrSnapshot,
@@ -190,7 +190,7 @@ function readyContribution(
     row.ci.kind !== "ci-clean" ||
     row.threads.length !== 0 ||
     conflictBlocker(row) !== null ||
-    gateReason(row, allowDraft) !== null
+    ineligibleReason(row, allowDraft) !== null
   )
     return null;
   const reviewDecision = row.facts.reviewDecision;
@@ -202,7 +202,7 @@ function readyContribution(
       mergeability: "clear",
       threads: [],
       ci: row.ci,
-      gate: {
+      eligibility: {
         state: "OPEN",
         reviewDecision,
         draft: row.facts.isDraft ? "draft-allowed" : "not-draft",
@@ -218,7 +218,7 @@ export function classifyPr(
     conflictBlocker(row),
     threadBlocker(row),
     ciBlocker(row),
-    gateBlocker(row, allowDraft),
+    ineligibleBlocker(row, allowDraft),
   ])
     if (blocker !== null) return { kind: "blocker", blocker };
   if (row.kind === "open" && row.ci.kind === "ci-pending")
@@ -239,7 +239,7 @@ export function selectTierMajorStackDecision(
       if (blocker !== null) return { kind: "blocker", blocker };
     }
   for (const row of rows) {
-    const blocker = gateBlocker(row, allowDraft);
+    const blocker = ineligibleBlocker(row, allowDraft);
     if (blocker !== null) return { kind: "blocker", blocker };
   }
   for (const row of rows)
@@ -271,25 +271,25 @@ interface Envelope<M extends T.WatchMode> {
 type Payload<V> = V extends unknown
   ? Omit<V, keyof Envelope<T.WatchMode>>
   : never;
-type VerdictPayload = Payload<T.WatcherVerdict>;
-export interface VerdictStamp<M extends T.WatchMode = T.WatchMode> {
-  <const P extends VerdictPayload>(payload: P): Envelope<M> & P;
-  <const P extends VerdictPayload, M2 extends T.WatchMode>(
+type EventPayload = Payload<T.WatcherEvent>;
+export interface EventStamp<M extends T.WatchMode = T.WatchMode> {
+  <const P extends EventPayload>(payload: P): Envelope<M> & P;
+  <const P extends EventPayload, M2 extends T.WatchMode>(
     payload: P,
     mode: M2
   ): Envelope<M2> & P;
 }
-export function verdictFactory<M extends T.WatchMode>(
+export function eventFactory<M extends T.WatchMode>(
   clock: WatchClock,
   mode: M
-): VerdictStamp<M> {
+): EventStamp<M> {
   let sequence = 0;
-  function stamp<const P extends VerdictPayload>(payload: P): Envelope<M> & P;
-  function stamp<const P extends VerdictPayload, M2 extends T.WatchMode>(
+  function stamp<const P extends EventPayload>(payload: P): Envelope<M> & P;
+  function stamp<const P extends EventPayload, M2 extends T.WatchMode>(
     payload: P,
     mode: M2
   ): Envelope<M2> & P;
-  function stamp<const P extends VerdictPayload>(
+  function stamp<const P extends EventPayload>(
     payload: P,
     override?: T.WatchMode
   ): Envelope<T.WatchMode> & P {
@@ -303,10 +303,10 @@ export function verdictFactory<M extends T.WatchMode>(
   }
   return stamp;
 }
-function blockerVerdict(
-  stamp: VerdictStamp,
+function blockerEvent(
+  stamp: EventStamp,
   blocker: T.MergeBlocker
-): T.BlockerVerdict {
+): T.BlockerEvent {
   switch (blocker.kind) {
     case "merge-conflicts":
       return stamp({ kind: "BLOCKER", terminal: true, exitCode: 2, blocker });
@@ -314,7 +314,7 @@ function blockerVerdict(
       return stamp({ kind: "BLOCKER", terminal: true, exitCode: 3, blocker });
     case "failing-checks":
       return stamp({ kind: "BLOCKER", terminal: true, exitCode: 4, blocker });
-    case "merge-gate":
+    case "merge-ineligible":
       return stamp({ kind: "BLOCKER", terminal: true, exitCode: 6, blocker });
     default: {
       const exhaustive: never = blocker;
@@ -322,11 +322,11 @@ function blockerVerdict(
     }
   }
 }
-export function statusQueryVerdict(
-  stamp: VerdictStamp,
+export function statusQueryEvent(
+  stamp: EventStamp,
   failures: number,
   failure: T.QueryFailure
-): T.BlockerVerdict {
+): T.BlockerEvent {
   return stamp({
     kind: "BLOCKER",
     terminal: true,
@@ -342,7 +342,7 @@ export interface WatchClock {
 export interface RunDependencies {
   readonly reader: T.GitHubReader;
   readonly clock: WatchClock;
-  readonly emit: (verdict: T.ProgressVerdict) => void;
+  readonly emit: (event: T.ProgressEvent) => void;
 }
 const deadlinePassed = (
   started: number,
@@ -350,7 +350,7 @@ const deadlinePassed = (
   now: number
 ): boolean => options.timeout > 0 && now - started >= options.timeout;
 type StepResult<V> =
-  | { readonly kind: "terminal"; readonly verdict: V }
+  | { readonly kind: "terminal"; readonly event: V }
   | {
       readonly kind: "sleep";
       readonly seconds: number;
@@ -360,9 +360,9 @@ type StepResult<V> =
 async function pollUntilTerminal<V>(args: {
   readonly dependencies: RunDependencies;
   readonly options: T.PollingOptions;
-  readonly stamp: VerdictStamp;
+  readonly stamp: EventStamp;
   readonly step: () => Promise<StepResult<V>>;
-}): Promise<V | T.BlockerVerdict | T.TimeoutVerdict> {
+}): Promise<V | T.BlockerEvent | T.TimeoutEvent> {
   let failures = 0;
   const started = args.dependencies.clock.now();
   while (true) {
@@ -374,7 +374,7 @@ async function pollUntilTerminal<V>(args: {
       if (!(error instanceof WatcherQueryError)) throw error;
       failures += 1;
       if (!error.failure.retryable || failures >= args.options.maxQueryErrors)
-        return statusQueryVerdict(args.stamp, failures, error.failure);
+        return statusQueryEvent(args.stamp, failures, error.failure);
       const retryInSeconds = queryBackoffSeconds(
         args.options.interval,
         failures
@@ -398,7 +398,7 @@ async function pollUntilTerminal<V>(args: {
       await args.dependencies.clock.sleep(retryInSeconds);
       continue;
     }
-    if (result.kind === "terminal") return result.verdict;
+    if (result.kind === "terminal") return result.event;
     if (result.kind === "sleep") {
       if (
         result.onDeadline !== undefined &&
@@ -415,9 +415,9 @@ export async function runSimple(args: {
   readonly mode: T.WatchMode;
   readonly statusOnly: boolean;
   readonly options: T.PollingOptions;
-}): Promise<T.TerminalVerdict> {
-  const stamp = verdictFactory(args.dependencies.clock, args.mode);
-  const step = async (): Promise<StepResult<T.TerminalVerdict>> => {
+}): Promise<T.TerminalEvent> {
+  const stamp = eventFactory(args.dependencies.clock, args.mode);
+  const step = async (): Promise<StepResult<T.TerminalEvent>> => {
     const rows: T.PrSnapshot[] = [];
     for (const context of args.contexts)
       rows.push(
@@ -433,7 +433,7 @@ export async function runSimple(args: {
     if (args.statusOnly)
       return {
         kind: "terminal",
-        verdict: stamp({
+        event: stamp({
           kind: "STATUS",
           terminal: true,
           exitCode: 0,
@@ -457,12 +457,12 @@ export async function runSimple(args: {
     if (decision.kind === "blocker")
       return {
         kind: "terminal",
-        verdict: blockerVerdict(stamp, decision.blocker),
+        event: blockerEvent(stamp, decision.blocker),
       };
     if (decision.kind === "ready" || decision.kind === "merged")
       return {
         kind: "terminal",
-        verdict: stamp(
+        event: stamp(
           {
             kind: "READY",
             terminal: true,
@@ -475,7 +475,7 @@ export async function runSimple(args: {
     if (decision.kind === "clear")
       return {
         kind: "terminal",
-        verdict: stamp(
+        event: stamp(
           {
             kind: "READY",
             terminal: true,
@@ -703,13 +703,13 @@ export async function runQueued(args: {
   readonly dependencies: RunDependencies;
   readonly contexts: T.NonEmpty<T.PrContext>;
   readonly options: T.PollingOptions;
-}): Promise<T.QueueTerminalVerdict> {
+}): Promise<T.QueueTerminalEvent> {
   let state = createQueueState(args.contexts, args.dependencies.clock.now());
-  const stamp = verdictFactory(args.dependencies.clock, "queued-stack");
+  const stamp = eventFactory(args.dependencies.clock, "queued-stack");
   args.dependencies.emit(
     stamp({ kind: "QUEUE", terminal: false, queue: args.contexts })
   );
-  const step = async (): Promise<StepResult<T.QueueTerminalVerdict>> => {
+  const step = async (): Promise<StepResult<T.QueueTerminalEvent>> => {
     state = planQueue(state, args.dependencies.clock.now());
     if (state.work === null) {
       const complete = evaluateQueue(
@@ -721,7 +721,7 @@ export async function runQueued(args: {
         throw new Error("queue has no work while active");
       return {
         kind: "terminal",
-        verdict: stamp({
+        event: stamp({
           kind: "COMPLETE",
           terminal: true,
           exitCode: 0,
@@ -767,7 +767,7 @@ export async function runQueued(args: {
       case "complete":
         return {
           kind: "terminal",
-          verdict: stamp({
+          event: stamp({
             kind: "COMPLETE",
             terminal: true,
             exitCode: 0,
@@ -778,7 +778,7 @@ export async function runQueued(args: {
       case "blocker":
         return {
           kind: "terminal",
-          verdict: blockerVerdict(stamp, evaluation.blocker),
+          event: blockerEvent(stamp, evaluation.blocker),
         };
       case "advance":
         args.dependencies.emit(
@@ -794,7 +794,7 @@ export async function runQueued(args: {
       case "timeout":
         return {
           kind: "terminal",
-          verdict: stamp({
+          event: stamp({
             kind: "TIMEOUT",
             terminal: true,
             exitCode: 5,

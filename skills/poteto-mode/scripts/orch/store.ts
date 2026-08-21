@@ -874,7 +874,7 @@ function changed(before: StatusSummary | null, after: StatusSummary): string {
   }
   if (before.openGateIds.join("\0") !== after.openGateIds.join("\0")) {
     result.push(
-      `open gates ${before.openGateIds.length}->${after.openGateIds.length}`
+      `open decision gates ${before.openGateIds.length}->${after.openGateIds.length}`
     );
   }
   return result.length === 0 ? "no derived changes" : result.join("; ");

@@ -399,7 +399,7 @@ describe("Store", () => {
     expect(
       await store.gates.resolve({ id: "release", answer: "ship" })
     ).toMatchObject({ kind: "resolved", answer: "ship" });
-    expect((await store.status.render()).changed).toBe("open gates 1->0");
+    expect((await store.status.render()).changed).toBe("open decision gates 1->0");
     expect(await store.gates.list()).toEqual([]);
     expect(await store.standing.show()).toEqual([
       { number: 1, line: "Never force push." },

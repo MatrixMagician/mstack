@@ -29,7 +29,7 @@ Create `orchestrate/<project-slug>/` in the current agent's store (path in the s
 - `units.tsv` has one row per unit: id, track, state, branch, PR, head SHA, brief path. Update rows in place.
 - `frontier.json` is the computed merge frontier, per Stack safety.
 - `ledger.tsv` is the verification ledger, per Verification.
-- `inbox/` holds completion pointers. `gates.md` parks human gates (question, options, default on no answer) so a completion flood cannot wipe AskUserQuestion state.
+- `inbox/` holds completion pointers. `gates.md` parks decision gates (question, options, default on no answer) so a completion flood cannot wipe AskUserQuestion state.
 - `decisions.tsv` is the trail via the show-me-your-work skill.
 - `status.md` is derived from `units.tsv` and `ledger.tsv` at each drain, never hand-maintained; regenerate it from the tables instead of narrating events into it, because hand-churned boards get rewritten on every event and go unreadable.
 
@@ -71,10 +71,10 @@ A dependency is a context relay, not just ordering: undeclared upstream context 
 
 - On a completion notification, run `orch inbox push <agent> <unit> <status> [--report PATH]` and return to what you were doing. Never deep-review inline; a completion that needs review becomes a verifier unit. Never review a diff inside a drain.
 - Drain in batches at four points: the end of a critical section, a track rollup, a frontier watcher wake (arm it via the loop skill, with a long heartbeat fallback), and before a human report. Begin each batch with `orch inbox drain`. Arrivals during a drain wait for the next one.
-- Critical sections you finish first: authoring a brief, a stack operation, a conflict decision, writing a gate, updating ledger or frontier.
+- Critical sections you finish first: authoring a brief, a stack operation, a conflict decision, writing a decision gate, updating ledger or frontier.
 - Each drain classifies every pointer (landed, needs-verify, failed, zombie, noise), writes the resulting rows through `orch unit add`, `orch unit set`, and `orch ledger record`, runs `orch status`, then spawns the next wave in one message.
 - Account for every spawned child at its track's rollup: arrived, respawned, or its scope explicitly absorbed. Silently redoing a missing child's work hides both the wasted spend and the coverage gap its result existed to close.
-- A drain turn ends with the three lines from `orch status`: counts against the states, what changed, gates open. Detail lives in `status.md`; the full reply contract applies at checkpoints and close.
+- A drain turn ends with the three lines from `orch status`: counts against the states, what changed, decision gates open. Detail lives in `status.md`; the full reply contract applies at checkpoints and close.
 
 #### Stack safety
 
@@ -110,4 +110,4 @@ Never reaches the human: frontier nudges, restack mechanics, retries, CI flake t
 
 Mid-run discoveries fix only what blocks the frontier. Everything else parks in follow-ups; at this fan-out a small scope leak multiplies into PRs nobody asked for.
 
-**Reply:** at checkpoints and close: the predicate and the count against it from `units.tsv` and `ledger.tsv`, tracks and what each landed, the frontier (PR list plus SHAs), verdicts summary, what was abandoned and why, gates awaiting the human (the only asks), the store path, and the trail path. Numbers from the tables, not narrative. Include PR links.
+**Reply:** at checkpoints and close: the predicate and the count against it from `units.tsv` and `ledger.tsv`, tracks and what each landed, the frontier (PR list plus SHAs), verdicts summary, what was abandoned and why, decision gates awaiting the human (the only asks), the store path, and the trail path. Numbers from the tables, not narrative. Include PR links.

@@ -4,10 +4,10 @@ import type {
   GitHubMergeAllowed,
   PrContext,
   ReadyPr,
-  TerminalVerdict,
+  TerminalEvent,
 } from "./types.ts";
 
-type ReadyVerdict = Extract<TerminalVerdict, { readonly kind: "READY" }>;
+type ReadyEvent = Extract<TerminalEvent, { readonly kind: "READY" }>;
 
 const context = {
   owner: "octocat",
@@ -44,7 +44,7 @@ const readyPr = {
     mergeability: "clear",
     threads: [],
     ci: cleanCi,
-    gate: {
+    eligibility: {
       state: "OPEN",
       reviewDecision: "APPROVED",
       draft: "not-draft",
@@ -60,7 +60,7 @@ const ready = {
   terminal: true,
   exitCode: 0,
   scope: { kind: "single", pr: readyPr },
-} satisfies ReadyVerdict;
+} satisfies ReadyEvent;
 
 void ready;
 
@@ -80,7 +80,7 @@ const refusalIsNotAllowed: GitHubMergeAllowed = refused;
 const refusalIsNotClean: CiClean = { ...cleanCi, github: refused };
 
 // @ts-expect-error READY cannot carry the failing-checks exit code.
-const readyWithBlockerExit: ReadyVerdict = { ...ready, exitCode: 4 };
+const readyWithBlockerExit: ReadyEvent = { ...ready, exitCode: 4 };
 
 const unprovenPr = { kind: "ready-pr", context } as const;
 

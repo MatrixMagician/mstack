@@ -181,7 +181,7 @@ function statusLines(report: StatusReport): string {
   return [
     `counts: units=${report.units.length}; states=${countLine(report.summary.unitStates)}; ledger=${countLine(report.summary.ledgerVerdicts)}`,
     `changed: ${report.changed}`,
-    `gates open: ${report.summary.openGateIds.length}${
+    `decision gates open: ${report.summary.openGateIds.length}${
       visible.length > 0 ? `; ids=${visible.join(",")}${more}` : ""
     }`,
   ].join("\n");
@@ -456,7 +456,7 @@ function createProgram(io: Io): Command {
       program,
       io,
       (store) => store.gates.list(),
-      (rows) => compactRows(rows, gateLine, "(no open gates)")
+      (rows) => compactRows(rows, gateLine, "(no open decision gates)")
     )
   );
   leaf(gate, "resolve <id>", "resolve a decision gate")

@@ -2,7 +2,7 @@ import { describe, expect, it } from "bun:test";
 import { type CliRuntime, main, parseArgs } from "./cli.ts";
 import { fakeReader, passingCheck } from "./fakes.test-helper.ts";
 import { renderJson, renderPretty } from "./render.ts";
-import type { GitHubReader, WatcherVerdict } from "./types.ts";
+import type { GitHubReader, WatcherEvent } from "./types.ts";
 import { parsePrNumber } from "./types.ts";
 
 const silentIo = { stdout: () => {}, stderr: () => {} };
@@ -136,7 +136,7 @@ describe("rendering", () => {
         },
       },
     ],
-  } satisfies WatcherVerdict;
+  } satisfies WatcherEvent;
 
   it("emits compact valid JSON by default", () => {
     const rendered = renderJson(status);
@@ -144,7 +144,7 @@ describe("rendering", () => {
     expect(JSON.parse(rendered)).toEqual(status);
   });
 
-  it("renders the Markdown table from the same verdict only", () => {
+  it("renders the Markdown table from the same event only", () => {
     const rendered = renderPretty(status);
     expect(rendered).toContain("| PR | CI | Review | Merge |");
     expect(rendered).toContain(
@@ -181,8 +181,8 @@ describe("main", () => {
     );
     expect(code).toBe(0);
     expect(harness.stdout).toHaveLength(1);
-    const verdict: unknown = JSON.parse(harness.stdout[0]);
-    expect(verdict).toMatchObject({
+    const event: unknown = JSON.parse(harness.stdout[0]);
+    expect(event).toMatchObject({
       kind: "STATUS",
       terminal: true,
       exitCode: 0,

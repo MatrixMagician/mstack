@@ -163,7 +163,7 @@ export interface ReadyPr {
     readonly mergeability: "clear";
     readonly threads: readonly [];
     readonly ci: CiClean;
-    readonly gate: {
+    readonly eligibility: {
       readonly state: "OPEN";
       readonly reviewDecision: Exclude<ReviewDecision, "CHANGES_REQUESTED">;
       readonly draft: "not-draft" | "draft-allowed";
@@ -175,7 +175,7 @@ export interface MergedPr {
   readonly context: PrContext;
   readonly mergedAt: string | null;
 }
-export type MergeGateReason =
+export type MergeIneligibleReason =
   | "closed-without-merge"
   | "draft-pr"
   | "changes-requested";
@@ -196,9 +196,9 @@ export type MergeBlocker =
       readonly ci: CiFailing | CiGithubRejected;
     }
   | {
-      readonly kind: "merge-gate";
+      readonly kind: "merge-ineligible";
       readonly pr: PrContext;
-      readonly reason: MergeGateReason;
+      readonly reason: MergeIneligibleReason;
     };
 export type QueryFailure =
   | {
@@ -274,7 +274,7 @@ interface Terminal<
   readonly terminal: true;
   readonly exitCode: C;
 }
-export type ProgressVerdict =
+export type ProgressEvent =
   | (Progress<"QUEUE", "queued-stack"> & {
       readonly queue: NonEmpty<PrContext>;
     })
@@ -301,7 +301,7 @@ export type ProgressVerdict =
       readonly consecutiveFailures: number;
       readonly retryInSeconds: number;
     });
-export type BlockerVerdict =
+export type BlockerEvent =
   | (Terminal<"BLOCKER", 2> & {
       readonly blocker: Extract<
         MergeBlocker,
@@ -321,7 +321,10 @@ export type BlockerVerdict =
       >;
     })
   | (Terminal<"BLOCKER", 6> & {
-      readonly blocker: Extract<MergeBlocker, { readonly kind: "merge-gate" }>;
+      readonly blocker: Extract<
+        MergeBlocker,
+        { readonly kind: "merge-ineligible" }
+      >;
     })
   | (Terminal<"BLOCKER", 7> & {
       readonly blocker: {
@@ -330,7 +333,7 @@ export type BlockerVerdict =
         readonly failure: QueryFailure;
       };
     });
-export type TimeoutVerdict = Terminal<"TIMEOUT", 5> & {
+export type TimeoutEvent = Terminal<"TIMEOUT", 5> & {
   readonly reason:
     | {
         readonly kind: "pending-checks";
@@ -343,7 +346,7 @@ export type TimeoutVerdict = Terminal<"TIMEOUT", 5> & {
         readonly unmergedCount: number;
       };
 };
-export type TerminalVerdict =
+export type TerminalEvent =
   | (Terminal<"STATUS", 0> & {
       readonly reason: "status-only";
       readonly rows: NonEmpty<PrSnapshot>;
@@ -360,14 +363,14 @@ export type TerminalVerdict =
       readonly queue: NonEmpty<PrContext>;
       readonly merged: NonEmpty<MergedPr>;
     })
-  | BlockerVerdict
-  | TimeoutVerdict;
-export type WatcherVerdict = ProgressVerdict | TerminalVerdict;
-export type ExitCode = TerminalVerdict["exitCode"];
-export type QueueTerminalVerdict =
-  | Extract<TerminalVerdict, { readonly kind: "COMPLETE" }>
-  | BlockerVerdict
-  | TimeoutVerdict;
+  | BlockerEvent
+  | TimeoutEvent;
+export type WatcherEvent = ProgressEvent | TerminalEvent;
+export type ExitCode = TerminalEvent["exitCode"];
+export type QueueTerminalEvent =
+  | Extract<TerminalEvent, { readonly kind: "COMPLETE" }>
+  | BlockerEvent
+  | TimeoutEvent;
 export type ChecksFastPath =
   | { readonly kind: "checks"; readonly checks: readonly Check[] }
   | {

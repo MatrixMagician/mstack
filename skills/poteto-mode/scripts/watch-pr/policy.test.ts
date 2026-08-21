@@ -23,7 +23,7 @@ import type {
   NonEmpty,
   PollingOptions,
   PrContext,
-  ProgressVerdict,
+  ProgressEvent,
   PullRequestFacts,
   RollupState,
 } from "./types.ts";
@@ -197,7 +197,7 @@ it("attributes a stack wait to the PR whose checks are pending, not the bottom",
   });
 });
 
-it("waits on a draft while checks are pending, then reports the draft gate", async () => {
+it("waits on a draft while checks are pending, then reports the draft blocker", async () => {
   const pending = await readSnapshot({
     reader: fakeReader({
       facts: { isDraft: true },
@@ -217,7 +217,7 @@ it("waits on a draft while checks are pending, then reports the draft gate", asy
   });
   expect(classifyPr(settled)).toMatchObject({
     kind: "blocker",
-    blocker: { kind: "merge-gate", reason: "draft-pr" },
+    blocker: { kind: "merge-ineligible", reason: "draft-pr" },
   });
 });
 
@@ -289,8 +289,8 @@ describe("queued-stack cadence", () => {
             if (sleeps === 2) throw new Error("stop after resume proof");
           },
         },
-        emit(verdict) {
-          timeline.push(`emit:${verdict.kind}`);
+        emit(event) {
+          timeline.push(`emit:${event.kind}`);
         },
       },
       contexts: [context(20), middle, context(22)],
@@ -358,7 +358,7 @@ describe("queued-stack cadence", () => {
     } satisfies GitHubReader;
     let now = 0;
     let sleeps = 0;
-    const emitted: ProgressVerdict[] = [];
+    const emitted: ProgressEvent[] = [];
     const running = runQueued({
       dependencies: {
         reader,
@@ -372,9 +372,9 @@ describe("queued-stack cadence", () => {
             if (sleeps === 2) throw new Error("stop after advance proof");
           },
         },
-        emit(verdict) {
-          emitted.push(verdict);
-          timeline.push(`emit:${verdict.kind}`);
+        emit(event) {
+          emitted.push(event);
+          timeline.push(`emit:${event.kind}`);
         },
       },
       contexts: [one, two],
