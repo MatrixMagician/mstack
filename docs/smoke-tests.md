@@ -73,7 +73,7 @@ Run `scripts/verify-smoke.sh` from the scratch repo after **each** prompt.
 | 3 | `/swarm check both js files for off-by-ones. one worker each.` | Workers spawn on `haiku` with `isolation: "worktree"`; one aggregated verdict |
 | 4 | `/create-verification-skill` | Writes to `.claude/skills/verify-<app>/` and nowhere else — the upstream skill targeted an editor-specific directory, so confirm the path rather than assuming the remap took; produces a feature map |
 | 5 | `/deslop sloppy.js` | Narrating comments, unsupported guards and the dead `addLegacy` path are gone; `add`'s behaviour is unchanged |
-| 6 | `/no-comments sloppy.js` | A `comment-sicko` subagent spawns |
+| 6 | `/no-comments sloppy.js` | A `Comment Sicko` subagent spawns |
 | 7 | `/control-cli` against any local TUI | Drives it through the tmux harness; installs nothing unsolicited |
 
 Tests 2 and 3 are where the port's model policy is actually on trial: confirm the reported
@@ -93,7 +93,30 @@ in [`skills/poteto-mode/references/transcripts.md`](../skills/poteto-mode/refere
 
 Record the result for each numbered test.
 
-**Last run: 2026-08-20 — all seven PASS.** That run found three defects every static gate had
+**Last run: 2026-08-21 at `e290701` — all seven PASS.** Evidence per test, from
+`attributionSkill` and the recorded `Task` calls:
+
+| # | Skill fired | Evidence |
+|---|---|---|
+| 1 | `mstack:poteto-mode` ×20 | First item read the Principles section; Bug-fix steps 1-6 copied in, two carrying `skip: <reason>`; fix proven by a failing test at `504af29` going green at `96000da` |
+| 2 | `mstack:arena` ×9 | Candidates on `fable` and `sonnet` — two tiers, no collapse; each wrote to its own `candidate-N/`; the `fable` cross-judge spawned 2m19s later, after both finished |
+| 3 | `mstack:swarm` ×21 | Workers on `haiku` with `isolation: "worktree"`, one per file, one aggregated report, no dropouts |
+| 4 | `mstack:create-verification-skill` ×30 | Wrote only under `.claude/skills/verify-mstack-smoke/`, with a `features/` map |
+| 5 | `mstack:deslop` ×8 | Narrating comments and unsupported guards gone; `add` identical on every probed input |
+| 6 | `mstack:no-comments` ×9 | `mstack:Comment Sicko` subagent spawned |
+| 7 | `mstack:control-cli` ×9 | Drove `top` through a tmux harness polling for `PID USER`, confirmed exit `0`, installed nothing, and left the pre-existing session it did not start alone |
+
+Two rows of this checklist are wrong, and the run is what surfaced them.
+
+**Row 5 asks for something `deslop` never promised.** Its focus areas are comments, defensive
+checks, `any` casts, and nesting; its guardrail is to keep behavior unchanged with minimal edits.
+Deleting the exported `addLegacy` is an API change, so a compliant run leaves it. Either scope
+dead-path removal into the skill or drop it from the row.
+
+**Row 6 spelled the agent `comment-sicko`.** It is registered and documented everywhere else as
+`Comment Sicko`, which is what `subagent_type` must match. Fixed in the row above.
+
+The 2026-08-20 run found three defects every static gate had
 passed: `/poteto-mode` registered as `/mstack:Poteto Mode` (a human display name in frontmatter),
 the upstream camelCase spelling of `general-purpose` surviving in nine places the gate had no pattern for, and `poteto-agent` unable to
 locate the skill it is named for — degrading silently while still answering plausibly.
