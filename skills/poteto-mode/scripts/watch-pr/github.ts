@@ -535,18 +535,20 @@ export class GhGitHubReader implements T.GitHubReader {
       at(value, ["data", "repository", "pullRequest", "commits", "nodes"]),
       "commits.nodes"
     );
-    if (commits.length === 0) return { checks: [], endCursor: null };
+    if (commits.length === 0)
+      return { checks: [], endCursor: null, reportedContexts: null };
     const commit = record(
       at(commits[commits.length - 1], ["commit"]),
       "commit"
     );
     if (commit.statusCheckRollup === null)
-      return { checks: [], endCursor: null };
+      return { checks: [], endCursor: null, reportedContexts: 0 };
     const contexts = record(
       at(commit, ["statusCheckRollup", "contexts"]),
       "contexts"
     );
-    const checks = list(contexts.nodes, "contexts.nodes")
+    const nodes = list(contexts.nodes, "contexts.nodes");
+    const checks = nodes
       .map(mapRollupNode)
       .filter((check): check is T.Check => check !== null);
     const page = record(contexts.pageInfo, "contexts.pageInfo");
@@ -556,7 +558,11 @@ export class GhGitHubReader implements T.GitHubReader {
       page.endCursor,
       "contexts.pageInfo.endCursor"
     );
-    return { checks, endCursor: page.hasNextPage && nextPage ? nextPage : null };
+    return {
+      checks,
+      endCursor: page.hasNextPage && nextPage ? nextPage : null,
+      reportedContexts: nodes.length,
+    };
   }
   async reviewThreads(
     context: T.PrContext
@@ -599,14 +605,22 @@ export async function resolveChecks(
   const direct = fast.kind === "checks" ? nonEmpty(fast.checks) : null;
   if (direct !== null) return { source: "gh-pr-checks", checks: direct };
   const checks: T.Check[] = [];
+  let reported: number | null = 0;
   let after: string | null = null;
   do {
     const page = await reader.checkRollupPage(context, after);
     checks.push(...page.checks);
+    reported =
+      reported === null || page.reportedContexts === null
+        ? null
+        : reported + page.reportedContexts;
     after = page.endCursor;
   } while (after !== null);
-  const fallback = nonEmpty(checks);
-  if (fallback !== null) return { source: "graphql-rollup", checks: fallback };
+  // Zero reported contexts is GitHub answering "this repository runs no checks
+  // here", not a failed read. Treating the two alike made the watcher retry
+  // forever on any PR in a repository without CI.
+  if (checks.length > 0 || reported === 0)
+    return { source: "graphql-rollup", checks };
   const suffix =
     fast.kind === "unusable"
       ? `fast path exit=${fast.exitCode}; GraphQL rollup was empty${firstLine(fast.stderr) ? `; ${firstLine(fast.stderr)}` : ""}`
