@@ -88,7 +88,8 @@ export type FailedCheck = Extract<Check, { readonly kind: "failed" }>;
 export type PendingCheck = Extract<Check, { readonly kind: "pending" }>;
 export interface CheckRead {
   readonly source: "gh-pr-checks" | "graphql-rollup";
-  readonly checks: NonEmpty<Check>;
+  /** Empty only when GitHub itself reported no checks on the head commit. */
+  readonly checks: readonly Check[];
 }
 export interface CommitRollup {
   readonly oid: string;
@@ -115,7 +116,7 @@ export type GitHubMergeAllowed =
 export type GitHubMergeAssessment = GitHubMergeAllowed | GitHubMergeRefusal;
 interface CiBase {
   readonly source: CheckRead["source"];
-  readonly all: NonEmpty<Check>;
+  readonly all: readonly Check[];
   readonly hadPreviousPassingCi: boolean;
 }
 export type CiFailing = CiBase & {
@@ -381,6 +382,13 @@ export type ChecksFastPath =
 export interface RollupPage {
   readonly checks: readonly Check[];
   readonly endCursor: string | null;
+  /**
+   * How many rollup contexts GitHub reported on this page, before any were
+   * dropped as unrecognized; `null` when the response could not say. Zero
+   * across every page is GitHub answering "no checks", which is a readable
+   * state. Anything else with no parsed checks is a read failure.
+   */
+  readonly reportedContexts: number | null;
 }
 export interface GitHubReader {
   originRepo(): Promise<Repository | null>;

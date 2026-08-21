@@ -38,8 +38,8 @@ describe("checks fallback chain", () => {
     const reader = fakeReader({
       fastPath: { kind: "unusable", exitCode: 8, stderr: "" },
       rollupPages: [
-        { checks: [passingCheck("first")], endCursor: "next" },
-        { checks: [failedCheck("second")], endCursor: null },
+        { checks: [passingCheck("first")], endCursor: "next", reportedContexts: 1 },
+        { checks: [failedCheck("second")], endCursor: null, reportedContexts: 1 },
       ],
     });
     const read = await resolveChecks(reader, context);
@@ -55,7 +55,9 @@ describe("checks fallback chain", () => {
   it("falls back when valid fast-path JSON represented an empty list", async () => {
     const reader = fakeReader({
       fastPath: { kind: "checks", checks: [] },
-      rollupPages: [{ checks: [pendingCheck("fallback")], endCursor: null }],
+      rollupPages: [
+        { checks: [pendingCheck("fallback")], endCursor: null, reportedContexts: 1 },
+      ],
     });
     expect((await resolveChecks(reader, context)).checks[0].name).toBe(
       "fallback"
@@ -63,18 +65,43 @@ describe("checks fallback chain", () => {
     expect(reader.calls).toEqual(["checksFastPath", "checkRollupPage:null"]);
   });
 
-  it("fails closed when both paths are empty", async () => {
+  it("fails closed when the rollup could not report a context count", async () => {
     const reader = fakeReader({
       fastPath: {
         kind: "unusable",
         exitCode: 8,
         stderr: "credential cannot read checks",
       },
+      rollupPages: [{ checks: [], endCursor: null, reportedContexts: null }],
     });
     await expect(resolveChecks(reader, context)).rejects.toBeInstanceOf(
       ChecksUnavailable
     );
     expect(reader.calls).toEqual(["checksFastPath", "checkRollupPage:null"]);
+  });
+
+  it("reads zero reported contexts as a repository with no CI", async () => {
+    const reader = fakeReader({
+      fastPath: {
+        kind: "unusable",
+        exitCode: 1,
+        stderr: "no checks reported on the 'feature' branch",
+      },
+      rollupPages: [{ checks: [], endCursor: null, reportedContexts: 0 }],
+    });
+    const read = await resolveChecks(reader, context);
+    expect(read.source).toBe("graphql-rollup");
+    expect(read.checks).toEqual([]);
+  });
+
+  it("fails closed when contexts were reported but none parsed", async () => {
+    const reader = fakeReader({
+      fastPath: { kind: "unusable", exitCode: 1, stderr: "" },
+      rollupPages: [{ checks: [], endCursor: null, reportedContexts: 3 }],
+    });
+    await expect(resolveChecks(reader, context)).rejects.toBeInstanceOf(
+      ChecksUnavailable
+    );
   });
 });
 

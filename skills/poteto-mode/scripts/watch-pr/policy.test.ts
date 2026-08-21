@@ -88,6 +88,29 @@ describe("readiness truth table", () => {
       blocker: { kind: "failing-checks" },
     });
   });
+
+  it("calls a repository with no CI ready rather than unreadable", async () => {
+    const reader = fakeReader({
+      fastPath: {
+        kind: "unusable",
+        exitCode: 1,
+        stderr: "no checks reported on the 'feature' branch",
+      },
+      rollupPages: [{ checks: [], endCursor: null, reportedContexts: 0 }],
+      commitRollups: [{ oid: "head", state: null }],
+    });
+    const snapshot = await readSnapshot({
+      reader,
+      context: context(1),
+      pendingHistory: "include",
+      allowDraft: false,
+    });
+    expect(snapshot.kind).toBe("open");
+    if (snapshot.kind !== "open") throw new Error("expected open snapshot");
+    expect(snapshot.ci.kind).toBe("ci-clean");
+    expect(snapshot.ci.all).toEqual([]);
+    expect(classifyPr(snapshot)).toMatchObject({ kind: "ready" });
+  });
 });
 
 describe("snapshot query planning", () => {
