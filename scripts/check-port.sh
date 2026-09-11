@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Port acceptance gate (SPEC.md §11.3). Fails if any banned string survives the port,
-# or if shipped content changed since the last release tag without a plugin.json version bump.
+# Port acceptance gate (SPEC.md §11.3). Fails if any banned string survives the port.
 # Run from the repo root. Exit 0 = clean.
 set -uo pipefail
 cd "$(dirname "$0")/.."
