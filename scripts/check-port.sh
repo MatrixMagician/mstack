@@ -25,6 +25,7 @@ PATTERNS=(
   'run_in_background	Cursor Task param with no Claude Code equivalent (§6)'
   'environment: *"?cloud	Cursor cloud execution (§8)'
   '\bpstack\b	old plugin name (§2)	:(exclude)README.md'
+  'subagent_type: "(poteto-agent|Comment Sicko)"	bare plugin agent name, want the mstack: prefix (§6)'
 )
 
 fail=0

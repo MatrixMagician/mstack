@@ -86,7 +86,7 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 ## Subagents
 
-**Use `subagent_type: "poteto-agent"` for any subagent you spawn inside a playbook step** (code-writing delegates, ad-hoc helpers). `/poteto-mode` and `poteto-agent` route through the same wrapper. Routed workflow skills (`how`, `why`, `interrogate`, `reflect`, `swarm`) set their own `subagent_type` for diverse-model review; respect what the skill prescribes, don't override to `poteto-agent`.
+**Use `subagent_type: "mstack:poteto-agent"` for any subagent you spawn inside a playbook step** (code-writing delegates, ad-hoc helpers). `/poteto-mode` and `poteto-agent` route through the same wrapper. Routed workflow skills (`how`, `why`, `interrogate`, `reflect`, `swarm`) set their own `subagent_type` for diverse-model review; respect what the skill prescribes, don't override to `poteto-agent`.
 
 **Defaults for every `Task` call.** File pointers, not inlined context. An explicit `model` per role: `sonnet` for code, `fable` for prose and judgment. Subagents already run in the background, so there is no flag to set; spawning several in one message is what buys the parallelism. Code delegates tier by difficulty. The hardest changes (cross-cutting design, gnarly concurrency, subtle algorithms) go to `fable` when the task needs judgment or the intent is vague, and to `opus` when the work is a precisely specified sequence of steps to execute to the letter; trivial mechanical edits go to `haiku`.
 
