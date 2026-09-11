@@ -58,6 +58,29 @@ for entry in "${PATTERNS[@]}"; do
   fi
 done
 
+SHIPPED=(skills agents hooks)
+
+# claude plugin update compares plugin.json's version, so an unbumped release leaves
+# every installer on the stale cache.
+tag=$(git describe --tags --abbrev=0 --match 'mstack--v*' --match 'v*' 2>/dev/null)
+if [ -z "$tag" ]; then
+  printf '\033[32mok\033[0m   release version: no release tag reachable, nothing to compare\n'
+else
+  released=$(git show "$tag:.claude-plugin/plugin.json" | sed -n 's/.*"version": *"\([^"]*\)".*/\1/p')
+  current=$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' .claude-plugin/plugin.json)
+  changed=$(git diff --name-only "$tag" -- "${SHIPPED[@]}")
+  if [ -n "$changed" ] && [ "$released" = "$current" ]; then
+    fail=1
+    n=$(printf '%s\n' "$changed" | wc -l)
+    printf '\n\033[31mFAIL\033[0m release version: %d shipped files changed since %s but plugin.json still says %s\n' \
+      "$n" "$tag" "$current"
+    printf '%s\n' "$changed" | head -20
+    [ "$n" -gt 20 ] && printf '  ... and %d more\n' "$((n - 20))"
+  else
+    printf '\033[32mok\033[0m   release version: %s (last tag %s)\n' "$current" "$tag"
+  fi
+fi
+
 echo
 if [ "$fail" -eq 0 ]; then
   echo "grep gate: clean"
