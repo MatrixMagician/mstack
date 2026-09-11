@@ -8,7 +8,7 @@ content from a second plugin, which a fork cannot represent cleanly.
 
 | Component | Upstream | Copyright | Licence |
 |---|---|---|---|
-| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` v0.14.1, by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
+| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` at `e8d856f` (v0.14.8 plus the September 2026 density pass), by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
 | `skills/deslop/`, `skills/control-cli/`, `skills/control-ui/` | [`cursor/plugins`](https://github.com/cursor/plugins) — `cursor-team-kit/skills/` | © 2026 Cursor | MIT — [`LICENSES/cursor-team-kit.LICENSE`](./LICENSES/cursor-team-kit.LICENSE) |
 | Port modifications | this repository | © 2026 Oliver H. | MIT — [`LICENSE`](./LICENSE) |
 
@@ -39,6 +39,13 @@ later upstream improvements are ported by diffing files.
 - **Review-bot triage generalised.** The Bugbot-specific reference and the PR watcher's detection
   logic now apply to whatever review bot a repo runs, with `claude-code-action` as the worked
   example.
+- **Synced to upstream `e8d856f`.** Two principle leaves arrive (`attack-the-premise`,
+  `test-behavior-not-implementation`). `how` loses its Critique Mode with upstream, so the panel
+  note above no longer applies to it; adversarial architecture review lives in `interrogate`. The
+  stack playbooks are forge-neutral through `gh`, and Graphite stays only in `orchestrate` and the
+  `orch` script. The multi-phase plan skeleton translates upstream's `/goal` to standing orders plus
+  the todolist, trunk re-reads to the installed plugin, cloud VMs per lane to worktrees, and the lane
+  model to the `swarm workers` alias. Upstream's model slug bumps are not ported; roles keep tier aliases.
 - **Worktree audit hardened.** `skills/poteto-mode/scripts/worktree-audit.sh` and its test are
   taken from [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT),
   a sibling port: it scans every `~/.claude/projects/` directory rather than one slug, warns when
