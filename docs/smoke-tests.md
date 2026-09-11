@@ -94,7 +94,7 @@ in [`skills/poteto-mode/references/transcripts.md`](../skills/poteto-mode/refere
 Record the result for each numbered test.
 
 **Last run: 2026-08-21 at `e290701` — all seven PASS.** Evidence per test, from
-`attributionSkill` and the recorded `Task` calls:
+`attributionSkill` and the recorded `Agent` calls:
 
 | # | Skill fired | Evidence |
 |---|---|---|

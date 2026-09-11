@@ -61,7 +61,7 @@ Then proceed to Step 3.
 
 ### Step 2b. Direct Explain (simple questions)
 
-Spawn a single Task subagent that explores and explains in one pass:
+Spawn a single subagent that explores and explains in one pass:
 
 - `subagent_type`: `general-purpose`
 - `model`: your configured how-explainer model (default `fable`)

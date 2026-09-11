@@ -37,7 +37,7 @@ For each candidate, read the first JSONL line and check that `message.content[0]
 
 ### 2. Spawn three reviewers in parallel
 
-One message, three `Task` calls, `subagent_type: general-purpose`, explicit `model:` on each. Reviewers reach MCP tools for context lookups (tickets, chat threads, observability traces referenced in the transcript) through the session's own tool list. The prompt forbids file writes; the parent applies edits.
+One message, three `Agent` calls, `subagent_type: general-purpose`, explicit `model:` on each. Reviewers reach MCP tools for context lookups (tickets, chat threads, observability traces referenced in the transcript) through the session's own tool list. The prompt forbids file writes; the parent applies edits.
 
 | Lens | `model` | Prompt template |
 |---|---|---|
@@ -45,11 +45,11 @@ One message, three `Task` calls, `subagent_type: general-purpose`, explicit `mod
 | Tooling | your configured reflect-tooling model (default `sonnet`) | `references/tooling-reviewer.md` |
 | Divergent | your configured reflect-judgment model (default `claude-fable-5-thinking-max`) | `references/divergent-reviewer.md` |
 
-Pass each template verbatim, substituting the transcript path or digest where marked. Reviewers return findings in the `Task` response body.
+Pass each template verbatim, substituting the transcript path or digest where marked. Reviewers return findings in the `Agent` response body.
 
 ### 3. Synthesize
 
-One `Task` call, `subagent_type: general-purpose`, using your configured reflect-judgment model (default `fable`). Use `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. The synthesizer returns a structured Accepted / Rejected / Backlog list.
+One `Agent` call, `subagent_type: general-purpose`, using your configured reflect-judgment model (default `fable`). Use `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. The synthesizer returns a structured Accepted / Rejected / Backlog list.
 
 ### 4. Structural enforcement check
 
