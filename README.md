@@ -223,7 +223,7 @@ twenty-one short skills, one principle each. `poteto-mode` indexes them inline a
 
 ## dependencies
 
-none. `deslop`, `control-cli`, and `control-ui` are vendored into this repo, so `poteto-mode` never routes at a skill you don't have. skill authoring routes to Claude Code's own `skill-creator` / `plugin-dev` skills; pr-status requests always route to the bundled [babysit playbook](./skills/poteto-mode/playbooks/babysit.md).
+none for the skills. the worktree-cleanup playbook's audit script wants `gh`, `jq`, and `rg` and warns on stderr when one is missing. `deslop`, `control-cli`, and `control-ui` are vendored into this repo, so `poteto-mode` never routes at a skill you don't have. skill authoring routes to Claude Code's own `skill-creator` / `plugin-dev` skills; pr-status requests always route to the bundled [babysit playbook](./skills/poteto-mode/playbooks/babysit.md).
 
 ## why are there no planning skills?
 
