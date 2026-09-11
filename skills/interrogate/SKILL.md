@@ -32,7 +32,7 @@ Write one clear paragraph. If you're unsure about the intent, ask the user befor
 
 ## Step 3, Spawn Reviewers
 
-Launch all reviewers in a single message using the Agent tool. Use the `interrogate reviewers` list from `.claude/rules/mstack-models.md` when that file exists, one reviewer per entry, extending or shrinking the Reviewer A/B/C labels below to the configured entry count; otherwise use the table defaults.
+Launch all reviewers in a single message using the Agent tool. Use the `interrogate reviewers` list from `.claude/rules/mstack-models.md` when that file exists, one reviewer per entry, extending or shrinking the Reviewer A/B/C labels below to the configured entry count. Otherwise use the table defaults.
 
 | Subagent | Default model | Effort |
 |----------|---------------|--------|
@@ -47,7 +47,7 @@ For each reviewer:
 - `model`: the configured `interrogate reviewers` entry, or the table default with no configured line
 - Read-only posture: instruct it to read and report, never write. Claude Code has no readonly flag, so the constraint lives in the prompt.
 
-The defaults are tier aliases, so they resolve for every user and do not go stale. If a configured override is rejected as unresolvable, fall back to the table default and note it in the report rather than blocking the review. If the configured value is `inherit-parent` or `auto`, omit `model` instead; never treat those aliases as broken slugs.
+The defaults are tier aliases, so they resolve for every user and do not go stale. If a configured override is rejected as unresolvable, fall back to the table default and note it in the report rather than blocking the review. If the configured value is `inherit-parent` or `auto`, omit `model` instead. Never treat those aliases as broken slugs.
 
 Read `references/reviewer-prompt.md` and fill in the template with:
 1. The stated intent

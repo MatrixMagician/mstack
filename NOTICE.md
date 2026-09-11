@@ -8,7 +8,7 @@ content from a second plugin, which a fork cannot represent cleanly.
 
 | Component | Upstream | Copyright | Licence |
 |---|---|---|---|
-| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` at `e8d856f` (v0.14.8 plus the September 2026 density pass), by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
+| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` at `f5bdd68` (v0.15.0), by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
 | `skills/deslop/`, `skills/control-cli/`, `skills/control-ui/` | [`cursor/plugins`](https://github.com/cursor/plugins) — `cursor-team-kit/skills/` | © 2026 Cursor | MIT — [`LICENSES/cursor-team-kit.LICENSE`](./LICENSES/cursor-team-kit.LICENSE) |
 | Port modifications | this repository | © 2026 Oliver H. | MIT — [`LICENSE`](./LICENSE) |
 
@@ -45,6 +45,8 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Synced to upstream `f5bdd68`.** Upstream's v0.15.0 punctuation, evidence-label, and
+  operator-neutral pronoun passes, merged the same way.
 - **Synced to upstream `e8d856f`.** Two principle leaves arrive (`attack-the-premise`,
   `test-behavior-not-implementation`). `how` loses its Critique Mode with upstream, so the panel
   note above no longer applies to it; adversarial architecture review lives in `interrogate`. The
