@@ -35,9 +35,9 @@ fail=0
 expect_skills=40
 n_skills=$(find skills -name SKILL.md 2>/dev/null | wc -l)
 n_principles=$(find skills -maxdepth 1 -type d -name 'principle-*' 2>/dev/null | wc -l)
-if [ "$n_skills" -lt "$expect_skills" ] || [ "$n_principles" -ne 21 ]; then
+if [ "$n_skills" -lt "$expect_skills" ] || [ "$n_principles" -ne 23 ]; then
   fail=1
-  printf '\033[31mFAIL\033[0m content present: %s SKILL.md (want >=%s), %s principle-* (want 21)\n' \
+  printf '\033[31mFAIL\033[0m content present: %s SKILL.md (want >=%s), %s principle-* (want 23)\n' \
     "$n_skills" "$expect_skills" "$n_principles"
 else
   printf '\033[32mok\033[0m   content present: %s SKILL.md, %s principle-*\n' "$n_skills" "$n_principles"
