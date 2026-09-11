@@ -2,7 +2,7 @@
 
 **Status:** Implemented on branch `port/mstack`. Sections below are corrected against what the port actually required; every claim marked **Correction** was wrong in the draft and is retained so the reasoning stays auditable.
 **Plugin name:** `mstack`
-**Upstream:** `github.com/cursor/plugins` — `pstack/` (v0.14.1, synced to `e8d856f`, v0.14.8 plus the September density pass) plus three skills from `cursor-team-kit/`
+**Upstream:** `github.com/cursor/plugins` — `pstack/` (v0.14.1, synced to `f5bdd68`, v0.15.0) plus three skills from `cursor-team-kit/`
 **Target:** A standalone Claude Code plugin, Claude models only
 **Audience:** This spec is written to be executed by Claude Code with the upstream checkout available.
 
@@ -85,7 +85,7 @@ exactly one conflict, `LICENSE` (add/add), resolved per §2.
 | `automations/` (benny) | present | Delete directory and all references |
 | `docs/guide/` | Cursor-centric walkthrough | Rewrite in place for Claude Code terminology (or delete for v1 and regenerate later; do not ship Cursor instructions) |
 | Agent frontmatter | `is_background: true` (poteto-agent) | `background: true` (Claude Code field name) |
-| Version | 0.14.1, later synced to `e8d856f` | Reset to `0.1.0`; the port is a new lineage |
+| Version | 0.14.1, later synced to `f5bdd68` | Reset to `0.1.0`; the port is a new lineage |
 | `CLAUDE.md` at repo root | n/a (added by this repo) | Rename to `AGENTS.md`. A root `CLAUDE.md` is itself a `--strict` warning in a plugin repo ("not loaded as project context"), and §11.1 demands zero warnings. Claude Code still loads `AGENTS.md` as project context. |
 | `.claude-plugin/marketplace.json` | n/a | Add it, so the `/plugin marketplace add` install path in §11.6 actually resolves. Validate separately: `claude plugin validate .claude-plugin/marketplace.json --strict`. |
 
