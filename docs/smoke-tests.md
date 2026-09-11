@@ -5,16 +5,18 @@ section before trying, because the obvious approach reports passes that did not 
 
 ## Why this is interactive-only
 
-**`claude -p` cannot run most of these skills.** 39 of mstack's 46 skills are
+**`claude -p` cannot run most of these skills.** 36 of mstack's 48 skills are
 `disable-model-invocation: true`, meaning user-invoked only. Headless mode has no slash-command
-mechanism, so those skills are unreachable and a `/poteto-mode ...` prompt is consumed as plain
-text. Only these 7 are model-invocable:
+mechanism, so those skills are unreachable and a `/swarm ...` prompt is consumed as plain
+text. Only these 12 are model-invocable:
 
 ```
-how  why  deslop  unslop  control-cli  control-ui  typescript-best-practices
+poteto-mode  tdd  architect  arena  interrogate  how  why
+deslop  unslop  control-cli  control-ui  typescript-best-practices
 ```
 
-That excludes every skill on the checklist except `/deslop` and `/control-cli`.
+That excludes rows 3, 4, and 6 of the checklist, and the SessionStart hook now fires
+`poteto-mode` on a non-trivial prompt in headless mode without the command being typed.
 
 **The failure is silent, not loud.** A headless `/bro explain this` returned correct, perfectly
 `/bro`-shaped prose — plain language, no jargon, right diagnosis — while the transcript recorded

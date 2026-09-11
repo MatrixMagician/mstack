@@ -39,6 +39,12 @@ later upstream improvements are ported by diffing files.
 - **Review-bot triage generalised.** The Bugbot-specific reference and the PR watcher's detection
   logic now apply to whatever review bot a repo runs, with `claude-code-action` as the worked
   example.
+- **Sticky mode is a hook.** Upstream's `mode`, `icon`, `color`, and `reminder` frontmatter are Cursor
+  sticky-mode keys that Claude Code ignores. `hooks/hooks.json` registers a `SessionStart` hook that
+  injects `hooks/session-start-context.md` at startup, after `/clear`, and after compaction, routing
+  non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
+  Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
+  [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
 - **Synced to upstream `e8d856f`.** Two principle leaves arrive (`attack-the-premise`,
   `test-behavior-not-implementation`). `how` loses its Critique Mode with upstream, so the panel
   note above no longer applies to it; adversarial architecture review lives in `interrogate`. The

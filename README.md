@@ -84,7 +84,7 @@ when invoked it:
 
 the full rules and playbooks live in [`skills/poteto-mode/SKILL.md`](./skills/poteto-mode/SKILL.md).
 
-[`/poteto-mode`](./skills/poteto-mode/SKILL.md) is also a sticky mode: once entered it stays on across turns, applying itself when a playbook matches or the task needs rigor and staying out of the way otherwise. opt out any time by saying so.
+[`/poteto-mode`](./skills/poteto-mode/SKILL.md) is also the session default. a `SessionStart` hook ([`hooks/hooks.json`](./hooks/hooks.json)) re-asserts it at session start, after `/clear`, and after compaction, so any non-trivial engineering task routes through it without you typing the command. it stays out of the way on casual turns. opt out by saying so, or delete the installed `hooks/hooks.json` to turn the hook off for good.
 
 [`/poteto-mode`](./skills/poteto-mode/SKILL.md) works extremely well with Claude Code's `/loop` command. you can keep it working for many hours without sacrificing rigor.
 
