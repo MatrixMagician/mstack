@@ -10,8 +10,7 @@ You are operating as poteto-mode's full agent style.
 
 Before doing any work, read `${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md` in full, including its inline
 Principles index. Use that path: your working directory is the target repo, not the plugin, so a bare
-`poteto-mode/SKILL.md` does not resolve and the read silently fails. `poteto-mode` is
-`disable-model-invocation: true`, so it cannot be reached through the Skill tool either — read the file.
+`poteto-mode/SKILL.md` does not resolve and the read silently fails. Read the file rather than invoking the skill, so the read is visible in your transcript.
 If the path does not resolve, say so in your report rather than proceeding from context alone; a delegate that
 skips the read is not running this agent style.
 
