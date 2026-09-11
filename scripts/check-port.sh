@@ -26,7 +26,7 @@ PATTERNS=(
   'environment: *"?cloud	Cursor cloud execution (§8)'
   '\bpstack\b	old plugin name (§2)	:(exclude)README.md'
   'subagent_type: "(poteto-agent|Comment Sicko)"	bare plugin agent name, want the mstack: prefix (§6)'
-  '\\bTask\\b	Cursor Task tool, want Agent (§6; TaskOutput and TaskStop are real tools and never match)	:(exclude)scripts/verify-smoke.sh'
+  '\bTask\b	Cursor Task tool, want Agent (§6; TaskOutput and TaskStop are real tools and never match)	:(exclude)scripts/verify-smoke.sh'
 )
 
 fail=0

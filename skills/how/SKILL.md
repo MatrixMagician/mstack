@@ -73,7 +73,7 @@ Proceed to Step 4.
 
 ### Step 3. Synthesize (complex questions only)
 
-Once all explorers return, spawn a single Task subagent to synthesize their findings into one coherent explanation:
+Once all explorers return, spawn a single subagent to synthesize their findings into one coherent explanation:
 
 - `subagent_type`: `general-purpose`
 - `model`: your configured how-explainer model (default `fable`)
