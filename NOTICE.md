@@ -39,6 +39,11 @@ later upstream improvements are ported by diffing files.
 - **Review-bot triage generalised.** The Bugbot-specific reference and the PR watcher's detection
   logic now apply to whatever review bot a repo runs, with `claude-code-action` as the worked
   example.
+- **Worktree audit hardened.** `skills/poteto-mode/scripts/worktree-audit.sh` and its test are
+  taken from [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT),
+  a sibling port: it scans every `~/.claude/projects/` directory rather than one slug, warns when
+  `jq` or `rg` is missing instead of silently blanking columns, never labels a worktree safe on
+  unknown facts, and runs on GNU coreutils.
 - **Dropped.** The benny automation pack (no Claude Code counterpart for Cursor's Slack-triggered
   automations) and the model-setup skill.
 
