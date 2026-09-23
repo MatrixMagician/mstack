@@ -1,7 +1,7 @@
 {
   "name": "mstack",
   "displayName": "mstack",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "if you want to go fast, go deep first. mstack helps you write less, but higher quality code. rigorous agent workflows you can parallelize with confidence. Reads your local Claude Code session transcripts (the active project's directory only) in the recall, reflect, show-me-your-work and automate-me skills, to rebuild working context. No network calls, no telemetry, nothing leaves your machine.",
   "author": {
     "name": "Oliver H."
