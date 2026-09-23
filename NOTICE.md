@@ -8,7 +8,7 @@ content from a second plugin, which a fork cannot represent cleanly.
 
 | Component | Upstream | Copyright | Licence |
 |---|---|---|---|
-| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` at `f5bdd68` (v0.15.0), by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
+| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` at `b0b9c7a` (v0.15.4), by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
 | `skills/deslop/`, `skills/control-cli/`, `skills/control-ui/` | [`cursor/plugins`](https://github.com/cursor/plugins) — `cursor-team-kit/skills/` | © 2026 Cursor | MIT — [`LICENSES/cursor-team-kit.LICENSE`](./LICENSES/cursor-team-kit.LICENSE) |
 | Port modifications | this repository | © 2026 Oliver H. | MIT — [`LICENSE`](./LICENSE) |
 
@@ -45,6 +45,12 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Synced to upstream `b0b9c7a`.** Upstream's v0.15.4 passes arrive: verification rounds that start
+  at the code-ready head, a `children.tsv` stuck-agent audit, and quiet audit ticks in the autopilots
+  and the multi-phase plan. The patch-id rule gains a noise test for test, doc, and lint-only drift,
+  swarm briefs pin SHAs and method, and the two cuts of instructions current models follow unaided are
+  taken. `log.sh` appends its header rather than truncating. The `setup-pstack` budget ask and the
+  model slug bumps are not ported.
 - **Synced to upstream `f5bdd68`.** Upstream's v0.15.0 punctuation, evidence-label, and
   operator-neutral pronoun passes, merged the same way.
 - **Synced to upstream `e8d856f`.** Two principle leaves arrive (`attack-the-premise`,
