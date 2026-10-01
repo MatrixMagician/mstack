@@ -45,6 +45,11 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Synced to upstream `12d587d`.** Upstream's v0.15.5 rule-conflict fixes arrive. Autopilot owners
+  babysit their own PRs and publish their own rebases with `--force-with-lease`. Every routed skill
+  reads its named line in `.claude/rules/mstack-models.md` the same way, and the decision-log audit
+  is append-only with per-run `start` rows. The cross-lab family fallback, the `setup-pstack`
+  retired-role cleanup are not ported, and the plan lane check already read `swarm workers`.
 - **Synced to upstream `b0b9c7a`.** Upstream's v0.15.4 passes arrive: verification rounds that start
   at the code-ready head, a `children.tsv` stuck-agent audit, and quiet audit ticks in the autopilots
   and the multi-phase plan. The patch-id rule gains a noise test for test, doc, and lint-only drift,

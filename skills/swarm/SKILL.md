@@ -22,12 +22,12 @@ Open a todolist with one entry per phase before launching anything.
 1. State the done predicate and the artifact or report the swarm must return.
 2. Choose the shape. Partition into slices, race N workers on identical briefs, or mix both. For a race or mixed shape, declare `first pass`, `rank all`, or `best-of` before spawning.
 3. Set N from the user or derive it from the shape. N is total workers, not the cloud concurrency limit.
-4. Pick the worker model from the `swarm workers` line in `.claude/rules/mstack-models.md` when that file exists. Otherwise use `haiku`. For a model race, name each arm's model up front.
+4. Pick the worker model from the `swarm workers` line in `.claude/rules/mstack-models.md`. If the file or that line is missing, use `haiku`. For `auto` or `inherit-parent`, omit `model` so the workers run on the parent model. If the Agent tool rejects a configured value, use the default and say so. For a model race, name each arm's model up front.
 5. Give each worker its own writable output when it writes. When workers verify or measure commits, each brief names the exact SHAs. A measurement brief also names the method (sample count, what one sample is, order). The worker records both in its result.
 
 ## Phase B: Fan out
 
-Spawn all N workers in one message with `subagent_type: general-purpose`, `isolation: "worktree"`, and the configured model. Subagents already run in the background, so the parallelism comes from spawning them in one message. Each worktree gives its worker a checkout of its own, which is what keeps N concurrent workers from writing over each other — the **separate-before-serializing-shared-state** principle skill, enforced by the harness rather than by convention.
+Spawn all N workers in one message with `subagent_type: general-purpose`, `isolation: "worktree"`, and the step 4 model, left unset for `auto` or `inherit-parent`. Subagents already run in the background, so the parallelism comes from spawning them in one message. Each worktree gives its worker a checkout of its own, which is what keeps N concurrent workers from writing over each other — the **separate-before-serializing-shared-state** principle skill, enforced by the harness rather than by convention.
 
 When a worker must start from a branch other than the current HEAD, say so in its brief and have it check the branch out inside its own worktree.
 
