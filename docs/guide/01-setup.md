@@ -25,6 +25,8 @@ arena runners: fable, opus, sonnet
 interrogate reviewers: fable, opus, sonnet
 ```
 
+The other role lines are `arena cross-judge`, `architect runners`, `how explorer`, `how explainer`, `why investigators`, `why synthesizer`, `reflect judgment, divergent, synthesizer`, `reflect tooling`, `feature, refactoring`, `bug-fix`, `perf-issue`, `hillclimb`, `hardest tasks`, and `judgment and prose`. Each skill names the line it reads.
+
 You only override what you care about. A role with no line keeps the skill's default; delete a line to restore it. Set a role to `inherit-parent` or `auto` and mstack omits the subagent `model` field, so the subagent inherits your parent chat model. Both values mean the same thing, and neither is a model name. For a panel role the value is a list, and one subagent runs per entry, so the list length sets the panel size.
 
 One caveat carried over from upstream: mstack's panels all draw on one model family, so they cannot rely on different labs having different blind spots. Keep any override spread across tiers rather than collapsing a panel onto a single one.

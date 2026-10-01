@@ -29,7 +29,7 @@ Skip Phase A only when the work is genuinely greenfield with no surrounding syst
 
 Run the **arena** skill with the design-sketch task and the Phase A grounding artifacts. Pass `references/runner-prompt.md` as each runner's prompt. Each candidate produces a design package shaped per `references/rationale-template.md`.
 
-Use your configured architect runners (defaults `fable`, `opus`, `sonnet` — three seats, one per tier). Never compose the panel from a single tier: with one model family, tier and persona differences are the only decorrelation you get, so spend them. Give each seat a distinct architectural bias in its prompt.
+Take the runners from the `architect runners` line in `.claude/rules/mstack-models.md`, in place of the `arena runners` line. If the file or that line is missing, use `fable`, `opus`, `sonnet`, three seats, one per tier. Alias and rejected entries follow the runner rules in the **arena** skill's Phase A. Never compose the panel from a single tier: with one model family, tier and persona differences are the only decorrelation you get, so spend them. Give each seat a distinct architectural bias in its prompt.
 
 Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the **exhaust-the-design-space** principle skill made concrete. Whole-shape alternatives, not point fixes inside one shape.
 
