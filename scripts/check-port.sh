@@ -2,7 +2,7 @@
 # Port acceptance gate (SPEC.md §11.3). Fails if any banned string survives the port.
 # Run from the repo root. Exit 0 = clean.
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 1
 
 # Files that are allowed to name what we ported away from.
 EXCLUDE=(':(exclude)LICENSES/*' ':(exclude)NOTICE.md' ':(exclude)SPEC.md'
