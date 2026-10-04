@@ -10,7 +10,11 @@ command -v jq >/dev/null || { echo "needs jq"; exit 2; }
 
 dir="$HOME/.claude/projects/$(pwd | tr './_' '-')"
 [ -d "$dir" ] || { echo "no transcripts for $(pwd)"; exit 1; }
-f=$(ls -t "$dir"/*.jsonl 2>/dev/null | head -1)
+f=""
+for c in "$dir"/*.jsonl; do
+  [ -e "$c" ] || continue
+  if [ -z "$f" ] || [ "$c" -nt "$f" ]; then f=$c; fi
+done
 [ -n "$f" ] || { echo "no .jsonl in $dir"; exit 1; }
 
 echo "transcript: $f"
