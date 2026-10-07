@@ -38,7 +38,7 @@ test('every skill the context names is reachable through the Skill tool', () => 
 
 test('principle leaves stay hidden from model invocation', () => {
   const leaves = readdirSync(join(root, 'skills')).filter((d) => d.startsWith('principle-'));
-  assert.equal(leaves.length, 23);
+  assert.equal(leaves.length, 24);
   for (const leaf of leaves) assert.match(frontmatter(leaf), /disable-model-invocation: true/, leaf);
 });
 
