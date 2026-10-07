@@ -41,7 +41,7 @@ later upstream improvements are ported by diffing files.
   example.
 - **Sticky mode is a hook.** Upstream's `mode`, `icon`, `color`, and `reminder` frontmatter are Cursor
   sticky-mode keys that Claude Code ignores. `hooks/hooks.json` registers a `SessionStart` hook that
-  injects `hooks/session-start-context.md` at startup, after `/clear`, and after compaction, routing
+  injects `hooks/session-start-context.md` at startup, on resume, after `/clear`, and after compaction, routing
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).

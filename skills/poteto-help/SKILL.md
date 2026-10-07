@@ -35,7 +35,7 @@ Check the state that changes the answer, and mention it only when it does:
 2. Skip model setup. Every skill names a Claude Code tier alias for each role, and aliases track the current release.
 3. Start a real task with `/poteto-mode`, a goal, and a check that can pass or fail.
 
-Installing turns on one `SessionStart` hook. It routes non-trivial engineering work into `/poteto-mode` at session start, after `/clear`, and after compaction, and it stays out of casual turns. The [README](../../README.md) and [guide page 1](../../docs/guide/01-setup.md) have the details. Offer to word their first prompt with them, per [`references/prompting.md`](references/prompting.md).
+Installing turns on one `SessionStart` hook. It routes non-trivial engineering work into `/poteto-mode` at session start, on resume, after `/clear`, and after compaction, and it stays out of casual turns. The [README](../../README.md) and [guide page 1](../../docs/guide/01-setup.md) have the details. Offer to word their first prompt with them, per [`references/prompting.md`](references/prompting.md).
 
 If cost is the worry, say where the tokens go and how to spend fewer. mstack spends extra tokens on subagents and review panels. To spend fewer, write `.claude/rules/mstack-models.md` with a cheaper tier for the roles that matter, one line per role, as guide page 1 shows. A role set to `auto` or `inherit-parent` runs on the chat's model. A shorter panel list runs fewer subagents, one for each entry. Save `/poteto-mode` for work that needs rigor.
 
@@ -47,7 +47,7 @@ mstack is built for Claude Code. Other tools can read the skill files, but the s
 
 `/poteto-mode` is the session default, and the hook keeps it that way:
 
-- The hook injects its routing block at session start, after `/clear`, and after compaction, so the mode survives a cleared or compacted chat without being typed again.
+- The hook injects its routing block at session start, on resume, after `/clear`, and after compaction, so the mode survives a resumed, cleared, or compacted chat without being typed again.
 - The block tells the session to enter `/poteto-mode` for any non-trivial engineering task and to skip it for pure questions and one-line edits.
 - Opt out by saying so in the chat, or delete the installed `hooks/hooks.json` to turn the hook off.
 
@@ -126,7 +126,7 @@ Principles are one-rule skills that `/poteto-mode` reads and cites in its replie
 
 | Symptom | Fix |
 |---|---|
-| The mode stopped applying mid-chat | The hook re-asserts it only at session start, after `/clear`, and after compaction. Type `/poteto-mode` with the task, or say "new task". |
+| The mode stopped applying mid-chat | The hook re-asserts it only at session start, on resume, after `/clear`, and after compaction. Type `/poteto-mode` with the task, or say "new task". |
 | A question got treated as the next step of the last task | Say "new task", or say the turn doesn't need the mode. |
 | A model override had no effect | The role line in `.claude/rules/mstack-models.md` must match a name from guide page 1. The skill reads the file when it runs, and a role with no line keeps its default. |
 | Runs cost more than expected | See the cost paragraph under Get set up. |
