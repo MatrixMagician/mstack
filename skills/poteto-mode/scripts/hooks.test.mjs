@@ -20,6 +20,16 @@ test('hooks.json registers one SessionStart command hook that cats the context f
   assert.equal(entry.hooks[0].command, 'cat "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-context.md"');
 });
 
+test('hooks.json registers the poteto-agent tier guard on PreToolUse', () => {
+  const hooks = JSON.parse(readFileSync(hooksPath, 'utf8')).hooks.PreToolUse;
+  assert.equal(hooks.length, 1);
+  const [entry] = hooks;
+  assert.equal(entry.matcher, 'Agent');
+  assert.equal(entry.hooks.length, 1);
+  assert.equal(entry.hooks[0].type, 'command');
+  assert.equal(entry.hooks[0].command, 'node "${CLAUDE_PLUGIN_ROOT}/hooks/require-agent-tier.mjs"');
+});
+
 test('the context file exists and routes to the namespaced mode', () => {
   assert.ok(existsSync(contextPath));
   const context = readFileSync(contextPath, 'utf8');
