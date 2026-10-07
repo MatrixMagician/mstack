@@ -128,7 +128,7 @@ Principles are one-rule skills that `/poteto-mode` reads and cites in its replie
 |---|---|
 | The mode stopped applying mid-chat | The hook re-asserts it only at session start, on resume, after `/clear`, and after compaction. Type `/poteto-mode` with the task, or say "new task". |
 | A question got treated as the next step of the last task | Say "new task", or say the turn doesn't need the mode. |
-| A model override had no effect | The role line in `.claude/rules/mstack-models.md` must match a name from guide page 1. The skill reads the file when it runs, and a role with no line keeps its default. |
+| A model override had no effect | The role name in `.claude/rules/mstack-models.md` must match a name from guide page 1. The skill reads the file when it runs, and a role with no line keeps its default. |
 | Runs cost more than expected | See the cost paragraph under Get set up. |
 | A skill didn't load on its own | Only a skill without `disable-model-invocation: true` in its frontmatter can load from the user's words. The rest, including this one and every principle, run when typed or when `/poteto-mode` runs them, and it doesn't run every skill. |
 | Parallel agents overwrote each other | Give each agent its own worktree. A subagent spawned with `isolation: "worktree"` gets one. |

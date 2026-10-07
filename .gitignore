@@ -5,3 +5,4 @@ node_modules/
 # Personal editor / tooling config — never ship in the plugin payload
 .vscode/
 .rtk/
+.claude/worktrees/

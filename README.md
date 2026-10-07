@@ -243,7 +243,7 @@ Claude Code already has a plan mode that works well alongside mstack, and upstre
 
 type [`/automate-me`](./skills/automate-me/SKILL.md). it mines your recent transcripts, drafts a `<your-name>-mode` skill from how you've actually worked, and routes through mstack underneath. you keep mstack as the base and end up with your own routing skill alongside `poteto-mode`.
 
-models are overridable too, though you shouldn't need to. every skill names a tier alias inline and falls back to it. to override a role, write `.claude/rules/mstack-models.md` with one line per role (`swarm workers: haiku`, `arena runners: fable, opus, sonnet`, and so on). a role with no line keeps its default; `inherit-parent` or `auto` runs that role on the parent chat model.
+models are overridable too, though you shouldn't need to. every skill names a tier alias inline and falls back to it. to override a role, write `.claude/rules/mstack-models.md` with one line per role (`swarm workers: haiku`, `arena runners: fable, opus, sonnet`, and so on). a role with no line keeps its default; `inherit-parent` or `auto` runs that role on the parent chat model. each tier also runs at a default reasoning effort (`fable` and `opus` high, `sonnet` medium, `haiku` low), and an `@<effort>` suffix overrides it for one role, as in `feature, refactoring: sonnet@high`.
 
 ## license
 

@@ -9,7 +9,7 @@ Investigate the motivation and intent behind code.
 
 Companion to the `how` skill. `how` answers what the code does and how it works. `why` answers what forces led to its shape.
 
-Each spawn below names a role line in `.claude/rules/mstack-models.md` and a default. Set `model` to that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured value, use the default and say so.
+Each spawn below names a role line in `.claude/rules/mstack-models.md` and a default. Set `model` to that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured value, use the default and say so. Set `effort` per **Effort by tier** in [`poteto-mode`](../poteto-mode/SKILL.md).
 
 ## Operating Posture
 

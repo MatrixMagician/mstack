@@ -44,6 +44,18 @@ _Avoid_: subagent (too general), child, delegate
 An agent that judges whether a unit works, run on a different tier from the worker that built it and never the same agent. Its independence is what makes a verdict mean anything.
 _Avoid_: reviewer, checker, QA
 
+**Tier**:
+A Claude Code model alias (`fable`, `opus`, `sonnet`, `haiku`) that follows the current release of its class. mstack names tiers, never pinned model versions.
+_Avoid_: model version, slug
+
+**Role**:
+A named kind of spawned agent (`how explorer`, `swarm workers`, `feature, refactoring`) whose tier a skill chooses by default and a user can override with one line.
+_Avoid_: persona, agent type
+
+**Effort**:
+How hard a spawned agent reasons, from `low` to `max`. Each tier has a default effort, and a role can override it.
+_Avoid_: thinking budget, reasoning level
+
 **Brief**:
 The complete instruction a spawned agent receives — goal, scope, context, acceptance, verify, timebox, forbidden, report, standing orders. A worker cannot ask a question, so an incomplete brief fails quietly. The brief is the coordinator's product.
 _Avoid_: prompt, spec, task description
