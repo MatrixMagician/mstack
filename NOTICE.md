@@ -8,7 +8,7 @@ content from a second plugin, which a fork cannot represent cleanly.
 
 | Component | Upstream | Copyright | Licence |
 |---|---|---|---|
-| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` at `b0b9c7a` (v0.15.4), by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
+| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` at `df58112` (v0.15.15), by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
 | `skills/deslop/`, `skills/control-cli/`, `skills/control-ui/` | [`cursor/plugins`](https://github.com/cursor/plugins) — `cursor-team-kit/skills/` | © 2026 Cursor | MIT — [`LICENSES/cursor-team-kit.LICENSE`](./LICENSES/cursor-team-kit.LICENSE) |
 | Port modifications | this repository | © 2026 Oliver H. | MIT — [`LICENSE`](./LICENSE) |
 
@@ -45,6 +45,14 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Synced to upstream `df58112`.** Upstream's v0.15.6 to v0.15.15 work arrives. Two skills
+  (`correct`, `benchmark-checklist`) and one principle (`explain-the-number`) are new, and
+  `poteto-help` is rewritten for Claude Code. It points at this repo, describes the SessionStart
+  hook in place of Custom Modes, and has no setup skill to send users to. Subagents are fresh by
+  default, the autopilot tick runs as `/loop 1h` with no armed goal, `architect` screens designs
+  against an agent contributor, and perf work orders fixes by the performance mantras. The model
+  slug changes, `setup-pstack`, `make-bot-ui`, the built-in PR tool rule, and the guide sections
+  on platform-only features are not ported.
 - **Synced to upstream `12d587d`.** Upstream's v0.15.5 rule-conflict fixes arrive. Autopilot owners
   babysit their own PRs and publish their own rebases with `--force-with-lease`. Every routed skill
   reads its named line in `.claude/rules/mstack-models.md` the same way, and the decision-log audit
