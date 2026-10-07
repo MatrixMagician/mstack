@@ -82,7 +82,7 @@ continue
 keep going until done
 ```
 
-Short works because the playbook holds the structure, and the `SessionStart` hook keeps `/poteto-mode` in force on every turn. [Set up mstack](./01-setup.md#run-your-first-task) covers the hook. Your words carry the intent, and the skill carries the rigor.
+Short works because the playbook holds the structure, and the `SessionStart` hook re-asserts `/poteto-mode` at session start, after `/clear`, and after compaction. [Set up mstack](./01-setup.md#run-your-first-task) covers the hook. Your words carry the intent, and the skill carries the rigor.
 
 ## Switch tasks with "new task"
 
