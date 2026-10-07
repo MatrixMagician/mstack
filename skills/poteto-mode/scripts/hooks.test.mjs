@@ -24,7 +24,7 @@ test('hooks.json registers the poteto-agent tier guard on PreToolUse', () => {
   const hooks = JSON.parse(readFileSync(hooksPath, 'utf8')).hooks.PreToolUse;
   assert.equal(hooks.length, 1);
   const [entry] = hooks;
-  assert.equal(entry.matcher, 'Agent|Task');
+  assert.equal(entry.matcher, 'Agent');
   assert.equal(entry.hooks.length, 1);
   assert.equal(entry.hooks[0].type, 'command');
   assert.equal(entry.hooks[0].command, 'node "${CLAUDE_PLUGIN_ROOT}/hooks/require-agent-tier.mjs"');

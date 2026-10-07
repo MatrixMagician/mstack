@@ -14,7 +14,7 @@ const VERDICT = {
   '00': (roles) => BARE_ROLE_LINE.test(roles),
 };
 
-export const denial = (toolInput, roles) => {
+const denial = (toolInput, roles) => {
   if (toolInput?.subagent_type !== GUARDED) return undefined;
   const key = `${toolInput.model ? 1 : 0}${toolInput.effort ? 1 : 0}`;
   return VERDICT[key](roles) ? undefined : REASON;
