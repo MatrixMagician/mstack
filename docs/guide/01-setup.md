@@ -35,7 +35,18 @@ One caveat carried over from upstream: mstack's panels all draw on one model fam
 
 mstack's verification skills assume your project has some scripted way to drive the real app. If yours has neither a `verify-*` skill nor an existing harness, run [`/create-verification-skill`](../../skills/create-verification-skill/SKILL.md).
 
-It writes `.claude/skills/verify-<app>/`, a project-local skill that teaches agents to drive your app the way a user does, and proves the skill works once before handing it over. [Verify and ship](./06-verify-and-ship.md#create-a-project-verification-skill) covers when it earns its place.
+It writes `.claude/skills/verify-<app>/`, a project-local skill that teaches agents to drive your app the way a user does, and proves the skill works once before handing it over. [Verify and ship](./06-verify-and-ship.md#create-a-project-verification-skill) covers it in depth.
+
+If you're new to mstack, run it now. An agent that can check its own work keeps going until the check passes. An agent that can't hands every result back to you to check by hand. Of everything in this guide, the verification skill pays off the most.
+
+## Keep the cost in check
+
+mstack spends extra tokens on subagents and review panels. That's the price of the rigor. To spend fewer:
+
+- Point a role at a cheaper tier in `.claude/rules/mstack-models.md`. A strong model in the main chat with cheaper, faster models in the code roles is a good split.
+- Set a role to `auto` or `inherit-parent` so it runs on the chat's own model.
+- Shorten a panel list. Each entry runs one subagent.
+- Save `/poteto-mode` for work that needs rigor. A small, obvious edit doesn't.
 
 ## Run your first task
 
