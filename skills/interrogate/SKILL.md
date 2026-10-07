@@ -32,15 +32,15 @@ Write one clear paragraph. If you're unsure about the intent, ask the user befor
 
 ## Step 3, Spawn Reviewers
 
-Launch all reviewers in a single message using the Agent tool. Use the `interrogate reviewers` line in `.claude/rules/mstack-models.md`, one reviewer per entry, extending or shrinking the Reviewer A/B/C labels below to the configured entry count. If the file or that line is missing, use the table defaults.
+Launch all reviewers in a single message using the Agent tool. Use the `interrogate reviewers` line in `.claude/rules/mstack-models.md`, one reviewer per entry, extending or shrinking the Reviewer A/B/C labels below to the configured entry count. If the file or that line is missing, use the table defaults. Set `effort` per **Effort by tier** in [`poteto-mode`](../poteto-mode/SKILL.md).
 
-| Subagent | Default model | Effort |
-|----------|---------------|--------|
-| Reviewer A | `fable` | `high` |
-| Reviewer B | `opus` | `high` |
-| Reviewer C | `sonnet` | `medium` |
+| Subagent | Default model |
+|----------|---------------|
+| Reviewer A | `fable` |
+| Reviewer B | `opus` |
+| Reviewer C | `sonnet` |
 
-The three seats are one family, so the rubric differentiation in `references/rubric.md` is carrying more weight here than it did upstream, where seats came from different labs. Keep the personas sharply distinct, keep the tiers spread, and vary `effort` as shown. A panel of three identical seats is one reviewer with extra steps.
+The three seats are one family, so the rubric differentiation in `references/rubric.md` is carrying more weight here than it did upstream, where seats came from different labs. Keep the personas sharply distinct, and keep the tiers spread, which varies `effort` through the tier table. A panel of three identical seats is one reviewer with extra steps.
 
 For each reviewer:
 - `subagent_type`: `general-purpose`

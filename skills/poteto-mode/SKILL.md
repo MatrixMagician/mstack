@@ -89,7 +89,18 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 **Use `subagent_type: "mstack:poteto-agent"` for any subagent you spawn inside a playbook step** (code-writing delegates, ad-hoc helpers). `/poteto-mode` and `poteto-agent` route through the same wrapper. Routed workflow skills (`how`, `why`, `interrogate`, `reflect`, `swarm`) set their own `subagent_type` for diverse-model review. Respect what the skill prescribes, don't override to `poteto-agent`.
 
-**Defaults for every `Agent` call.** File pointers, not inlined context. An explicit `model` per role: `sonnet` for code, `fable` for prose and judgment. Subagents already run in the background, so there is no flag to set; spawning several in one message is what buys the parallelism. Code delegates tier by difficulty. The hardest changes (cross-cutting design, gnarly concurrency, subtle algorithms) go to `fable` when the task needs judgment or the intent is vague, and to `opus` when the work is a precisely specified sequence of steps to execute to the letter. Trivial mechanical edits go to `haiku`.
+**Defaults for every `Agent` call.** File pointers, not inlined context. An explicit `model` per role, with that tier's `effort` per **Effort by tier**: `sonnet` for code, `fable` for prose and judgment. Subagents already run in the background, so there is no flag to set; spawning several in one message is what buys the parallelism. Code delegates tier by difficulty. The hardest changes (cross-cutting design, gnarly concurrency, subtle algorithms) go to `fable` when the task needs judgment or the intent is vague, and to `opus` when the work is a precisely specified sequence of steps to execute to the letter. Trivial mechanical edits go to `haiku`.
+
+**Effort by tier.** Every `Agent` call that sets `model` to a tier also sets `effort` to that tier's value.
+
+| Tier | Effort |
+|---|---|
+| `fable` | `high` |
+| `opus` | `high` |
+| `sonnet` | `medium` |
+| `haiku` | `low` |
+
+A role line value can carry an `@<effort>` suffix, as in `feature, refactoring: sonnet@high`. In a panel list the suffix applies per entry. The suffix wins over the table. A bare `auto` or `inherit-parent` omits both `model` and `effort`, so the spawn inherits the session. `auto@low` omits `model` and passes `low`. A suffix that is not one of `low`, `medium`, `high`, `xhigh`, `max` is ignored. The table value applies, and you say so.
 
 Model names here are aliases, not pinned versions — they follow the current release of each tier, which is why this port has no model-setup skill to keep them fresh. Per-role lines in `.claude/rules/mstack-models.md` override these defaults and the model choices in the routed skills (`how`, `why`, `arena`, `swarm`, `architect`, `interrogate`, `reflect`) when you choose to write that file; it is an override layer, never a requirement. A role with no line keeps its default, and a role line of `inherit-parent` or `auto` runs that role on the parent chat model (omit `model` on the `Agent` call). Each code playbook's configured model comes from its line (`feature, refactoring`, `bug-fix`, `perf-issue`, or `hillclimb`), and the hardest changes read `hardest tasks`. Prose and judgment read `judgment and prose`.
 

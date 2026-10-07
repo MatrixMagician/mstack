@@ -33,7 +33,7 @@ For each candidate, read the first JSONL line and check that `message.content[0]
 
 One message, three `Agent` calls, `subagent_type: general-purpose`, with `model` set as below. Reviewers reach MCP tools for context lookups (tickets, chat threads, observability traces referenced in the transcript) through the session's own tool list. The prompt forbids file writes; the parent applies edits.
 
-Each reviewer and the synthesizer name a role line in `.claude/rules/mstack-models.md` and a default. Set `model` to that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured value, use the default and say so.
+Each reviewer and the synthesizer name a role line in `.claude/rules/mstack-models.md` and a default. Set `model` to that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured value, use the default and say so. Set `effort` per **Effort by tier** in [`poteto-mode`](../poteto-mode/SKILL.md).
 
 | Lens | Role line | Default `model` | Prompt template |
 |---|---|---|---|
