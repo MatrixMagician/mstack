@@ -86,6 +86,8 @@ the full rules and playbooks live in [`skills/poteto-mode/SKILL.md`](./skills/po
 
 [`/poteto-mode`](./skills/poteto-mode/SKILL.md) is also the session default. a `SessionStart` hook ([`hooks/hooks.json`](./hooks/hooks.json)) re-asserts it at session start, on resume, after `/clear`, and after compaction, so any non-trivial engineering task routes through it without you typing the command. it stays out of the way on casual turns. opt out by saying so, or delete the installed `hooks/hooks.json` to turn the hook off for good.
 
+a `PreToolUse` hook in the same file guards the spawns. it denies a `mstack:poteto-agent` call that leaves out `model` or `effort`, and the denial says which tier efforts to send, so the retry lands in the same turn. a bare `auto` or `inherit-parent` role line in `.claude/rules/mstack-models.md` lets a call omit both. see [ADR 0002](./docs/adr/0002-enforce-agent-tier-with-a-hook.md).
+
 [`/poteto-mode`](./skills/poteto-mode/SKILL.md) works extremely well with Claude Code's `/loop` command. you can keep it working for many hours without sacrificing rigor.
 
 ## skills

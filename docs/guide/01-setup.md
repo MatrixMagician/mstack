@@ -60,6 +60,6 @@ Pick something real but small, and describe it the way you'd describe it to a co
 
 Watch the todo list. Its first items are the matched playbook's steps copied in, the Feature playbook for this prompt. If `/poteto-mode` skips a step, the step stays in the list with `skip: <reason>`, so you can see what it chose not to do.
 
-From here you can type normal follow-ups. `/poteto-mode` is the session default. A `SessionStart` hook re-asserts it at session start, on resume, after `/clear`, and after compaction, so you rarely need to type it. Opt out by saying so, or delete the installed `hooks/hooks.json` to turn the hook off.
+From here you can type normal follow-ups. `/poteto-mode` is the session default. A `SessionStart` hook re-asserts it at session start, on resume, after `/clear`, and after compaction, so you rarely need to type it. Opt out by saying so, or delete the installed `hooks/hooks.json` to turn the hook off. A second hook, on `PreToolUse`, denies a `mstack:poteto-agent` spawn that omits `model` or `effort` and tells the orchestrator which values to send.
 
 Next: [Route work through `/poteto-mode`](./02-poteto-mode.md).
