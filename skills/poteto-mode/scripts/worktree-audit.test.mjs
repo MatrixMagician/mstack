@@ -103,8 +103,8 @@ function commit(worktree, message, filename = `${message.replaceAll(' ', '-')}.t
     'commit', '-m', message);
 }
 
-function runAuditRaw(fixture, prs = [], extraEnv = {}) {
-  return spawnSync('/bin/bash', [auditScript, fixture.repo, fixture.transcripts], {
+function runAuditRaw(fixture, prs = [], extraEnv = {}, flags = []) {
+  return spawnSync('/bin/bash', [auditScript, ...flags, fixture.repo, fixture.transcripts], {
     encoding: 'utf8',
     env: {
       HOME: fixture.root,
@@ -121,8 +121,8 @@ function runAuditRaw(fixture, prs = [], extraEnv = {}) {
   });
 }
 
-function runAudit(fixture, prs, extraEnv) {
-  const result = runAuditRaw(fixture, prs, extraEnv);
+function runAudit(fixture, prs, extraEnv, flags) {
+  const result = runAuditRaw(fixture, prs, extraEnv, flags);
   assert.equal(result.status, 0, result.stderr);
   return result.stdout;
 }
@@ -165,6 +165,27 @@ test('marks an actual origin/main ancestor safe', () => {
   const row = rowFor(runAudit(fixture), ancestor);
   assert.equal(row[2], 'YES');
   assert.equal(row[7], 'safe');
+});
+
+test('checks MERGED against the -b base, not origin/main', () => {
+  const fixture = createRepo();
+  const landed = addWorktree(fixture, 'landed', 'landed');
+  commit(landed, 'merged into integration');
+  git('-C', fixture.repo, 'update-ref', 'refs/remotes/origin/integration', git('-C', landed, 'rev-parse', 'HEAD'));
+  const byDefault = runAudit(fixture);
+  assert.match(byDefault, /^# base: origin\/main$/m);
+  assert.equal(rowFor(byDefault, landed)[2], 'no');
+  const withBase = runAudit(fixture, [], {}, ['-b', 'origin/integration']);
+  assert.match(withBase, /^# base: origin\/integration$/m);
+  assert.equal(rowFor(withBase, landed)[2], 'YES');
+  assert.equal(rowFor(withBase, landed)[7], 'safe');
+});
+
+test('fails when the -b base does not exist', () => {
+  const fixture = createRepo();
+  const result = runAuditRaw(fixture, [], {}, ['-b', 'origin/missing']);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /base ref not found: origin\/missing/);
 });
 
 test('holds tracked dirty work', () => {
