@@ -4,12 +4,29 @@
 # operated in it. Emits a table sorted by size with a suggested bucket. Never
 # deletes anything; deletion stays a human-gated step in the playbook.
 #
-# Usage: worktree-audit.sh [repo-path] [transcripts-path]
+# Usage: worktree-audit.sh [-b|--base <ref>] [repo-path] [transcripts-path]
+#   repo-path defaults to the current repo.
+#   transcripts-path defaults to ~/.claude/projects.
+#   -b sets the ref the MERGED column checks against (e.g. origin/integration).
+#   Without it the base is origin/HEAD, then origin/main, then origin/master.
+#   origin/HEAD is the remote's default branch, not necessarily the branch PRs
+#   merge into; pass -b when they differ.
 set -u
+
+base=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -b|--base) [ $# -ge 2 ] || { echo "error: $1 needs a ref" >&2; exit 2; }; base="$2"; shift 2 ;;
+        -h|--help) sed -n '2,/^set -u/p' "$0" | sed '$d; s/^# \{0,1\}//'; exit 0 ;;
+        -*) echo "error: unknown option: $1" >&2; exit 2 ;;
+        *) break ;;
+    esac
+done
 
 repo="${1:-$(git rev-parse --show-toplevel 2>/dev/null)}"
 [ -z "$repo" ] && { echo "not in a git repo; pass a repo path" >&2; exit 1; }
 cd "$repo" || exit 1
+git rev-parse --git-dir >/dev/null 2>&1 || { echo "error: not a git repo: $repo" >&2; exit 1; }
 
 # GNU and BSD spell file mtime and epoch-to-date differently; pick once.
 if stat -c %Y . >/dev/null 2>&1; then
@@ -78,12 +95,27 @@ classify_bucket() {
     echo review
 }
 
-# Keep displaying partial facts when discovery fails, but never label them safe.
-discovery_known=yes
-if ! fetch_err=$(git fetch origin main 2>&1 >/dev/null); then
-    discovery_known=no
-    echo "warn: could not fetch origin/main; merged column may be stale: $fetch_err" >&2
+if [ -z "$base" ]; then
+    for cand in "$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)" origin/main origin/master; do
+        [ -n "$cand" ] && git rev-parse --verify --quiet "$cand^{commit}" >/dev/null && { base="$cand"; break; }
+    done
+    [ -z "$base" ] && { echo "error: no base ref (origin/HEAD, origin/main, origin/master all missing); pass -b <ref>" >&2; exit 1; }
+    echo "warn: no -b given; MERGED checks against $base" >&2
 fi
+
+# Keep displaying partial facts when discovery fails, but never label them safe.
+# The fetch runs before the base check, since -b may name a branch not fetched
+# yet. The explicit refspec creates it even in a single-branch clone.
+discovery_known=yes
+case "$base" in
+    origin/*)
+        if ! fetch_err=$(git fetch origin "+refs/heads/${base#origin/}:refs/remotes/$base" 2>&1 >/dev/null); then
+            discovery_known=no
+            echo "warn: could not fetch $base; merged column may be stale: $fetch_err" >&2
+        fi
+        ;;
+esac
+git rev-parse --verify --quiet "$base^{commit}" >/dev/null 2>&1 || { echo "error: base ref not found: $base" >&2; exit 1; }
 
 # PR state by branch, fetched once. Empty if gh is unavailable.
 if ! prs=$(gh pr list --author "@me" --state all --limit 1000 --json number,state,headRefName,headRefOid 2>&1); then
@@ -109,6 +141,7 @@ fi
 transcripts="${2:-$HOME/.claude/projects}"
 now=$(date +%s)
 
+echo "# base: $base"
 printf "SIZE\tAGE\tMERGED\tDIRTY\tREMOTE\tPR\tLAST_CHAT\tBUCKET\tWORKTREE\n"
 
 parse_worktrees | while IFS= read -r -d '' wt && IFS= read -r -d '' state; do
@@ -144,7 +177,7 @@ parse_worktrees | while IFS= read -r -d '' wt && IFS= read -r -d '' state; do
 
     ancestry="?"
     if [ "$head" != "?" ]; then
-        git merge-base --is-ancestor "$head" origin/main >/dev/null 2>&1
+        git merge-base --is-ancestor "$head" "$base" >/dev/null 2>&1
         merge_status=$?
         if [ "$merge_status" -eq 0 ]; then
             ancestry=YES

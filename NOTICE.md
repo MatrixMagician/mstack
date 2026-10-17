@@ -8,7 +8,7 @@ content from a second plugin, which a fork cannot represent cleanly.
 
 | Component | Upstream | Copyright | Licence |
 |---|---|---|---|
-| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` at `df58112` (v0.15.15), by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
+| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` at `101b274` (v0.15.25), by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
 | `skills/deslop/`, `skills/control-cli/`, `skills/control-ui/` | [`cursor/plugins`](https://github.com/cursor/plugins) — `cursor-team-kit/skills/` | © 2026 Cursor | MIT — [`LICENSES/cursor-team-kit.LICENSE`](./LICENSES/cursor-team-kit.LICENSE) |
 | Port modifications | this repository | © 2026 Oliver H. | MIT — [`LICENSE`](./LICENSE) |
 
@@ -45,6 +45,13 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Synced to upstream `101b274`.** Upstream's v0.15.16 to v0.15.25 work arrives. Three skills
+  (`ketchup`, `in-your-own-words`, `sharpen`) are new. `poteto-mode` runs in the chat that receives
+  it and `poteto-agent` is a delegate wrapper. Subagent effort matches the job. Four principles are
+  restated as reasoning, and `why`, `how`, `interrogate`, `arena`, and `reflect` are distilled.
+  `watch-pr` paginates review threads, `worktree-audit` checks MERGED against the default branch,
+  and `check-plan` respects fenced code blocks. Upstream's Claude Code and Codex packaging, the
+  generated harness trees, and the Grok-only agent rename are not ported.
 - **Synced to upstream `df58112`.** Upstream's v0.15.6 to v0.15.15 work arrives. Two skills
   (`correct`, `benchmark-checklist`) and one principle (`explain-the-number`) are new, and
   `poteto-help` is rewritten for Claude Code. It points at this repo, describes the SessionStart

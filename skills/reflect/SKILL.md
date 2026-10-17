@@ -8,15 +8,11 @@ disable-model-invocation: true
 
 Mine the current conversation for durable learnings, then route them into skill edits.
 
-## When to invoke
-
 Invoke when the user says "reflect" or "/reflect". Skip when the conversation is trivial, off-topic, or already covered by an existing skill the parent followed correctly. One-offs are not learnings.
 
-## Process
+## 1. Locate the active transcript
 
-### 1. Locate the active transcript
-
-The parent finds its own transcript file before fanning out. Sessions live flat in the active workspace's project directory, one file per session:
+Before fanning out, find this conversation's transcript. Sessions live flat in the active workspace's project directory, one file per session:
 
 ```bash
 dir="$HOME/.claude/projects/$(pwd | tr './_' '-')"
@@ -25,13 +21,13 @@ ls -t "$dir"/*.jsonl | head -10
 
 Do not glob across `~/.claude/projects/*/`. That crosses workspace boundaries and reads private chats from unrelated projects.
 
-Read `../poteto-mode/references/transcripts.md` before parsing: the escaping rule covers `.` and `_` as well as `/`, most lines are not messages, and subagent turns are marked `isSidechain` inside the same file rather than living in separate ones.
+Read `../poteto-mode/references/transcripts.md` before parsing. The escaping rule covers `.` and `_` as well as `/`, most lines are not messages, and subagent turns are marked `isSidechain` inside the same file rather than living in separate ones.
 
-For each candidate, read the first JSONL line and check that `message.content[0].text` contains the conversation's opening user prompt. Take the matching path. If no path resolves, write a tight digest of the session and pass that instead.
+For each candidate, read the first JSONL line. Take the file whose `message.content[0].text` contains the conversation's opening user prompt. If none matches, pass a tight digest of the session instead.
 
-### 2. Spawn three reviewers in parallel
+## 2. Spawn three reviewers in parallel
 
-One message, three `Agent` calls, `subagent_type: general-purpose`, with `model` set as below. Reviewers reach MCP tools for context lookups (tickets, chat threads, observability traces referenced in the transcript) through the session's own tool list. The prompt forbids file writes; the parent applies edits.
+One message, three `Agent` calls, `subagent_type: general-purpose`. Reviewers reach MCP tools through the session's own tool list to look up the tickets, chat threads, and observability traces the transcript references. The prompt forbids file writes; the parent applies edits.
 
 Each reviewer and the synthesizer name a role line in `.claude/rules/mstack-models.md` and a default. Set `model` to that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured value, use the default and say so. Set `effort` per **Effort by tier** in [`poteto-mode`](../poteto-mode/SKILL.md).
 
@@ -43,30 +39,30 @@ Each reviewer and the synthesizer name a role line in `.claude/rules/mstack-mode
 
 Pass each template verbatim, substituting the transcript path or digest where marked. Reviewers return findings in the `Agent` response body.
 
-### 3. Synthesize
+## 3. Synthesize
 
-One `Agent` call, `subagent_type: general-purpose`, with `model` from the `reflect judgment, divergent, synthesizer` line (default `fable`). Use `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. The synthesizer returns a structured Accepted / Rejected / Backlog list.
+One `Agent` call, `subagent_type: general-purpose`, `model` from the `reflect judgment, divergent, synthesizer` line (default `fable`). Pass `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. It returns an Accepted / Rejected / Backlog list.
 
-### 4. Structural enforcement check
+## 4. Structural enforcement check
 
-Sanity-check the synthesizer's Accepted list. For any item that would be enforced more reliably by a lint rule, script, metadata flag, or runtime check, move it from Accepted to Backlog. See the **encode-lessons-in-structure** principle skill.
+Move any Accepted item that a lint rule, script, metadata flag, or runtime check would enforce more reliably to Backlog. See the **encode-lessons-in-structure** principle skill.
 
-### 5. Apply
+## 5. Apply
 
-Before applying any Accepted edit, present the synthesizer's full Accepted/Rejected/Backlog output to the user and wait for explicit approval. The user picks which subset to apply and may redirect routings. Skill changes affect every future agent in the org. Do not auto-apply.
+Present the synthesizer's full Accepted / Rejected / Backlog output and wait for explicit approval before applying any Accepted edit. The user picks the subset and may redirect routings. Skill changes affect every future agent in the org. Do not auto-apply.
 
-Backlog items file to whatever devex / backlog tracker your team uses automatically. Only the Accepted list waits for approval.
+File each Backlog item to your team's devex or backlog tracker without waiting. Only the Accepted list waits for approval.
 
-For each approved Accepted item, follow the Routing field exactly:
+Follow each approved row's Routing exactly:
 
-- Trivial existing-skill edit (a one-line bullet, a tightened sentence, a stale fact corrected): parent does directly.
+- Trivial existing-skill edit (a one-line bullet, a tightened sentence, a stale fact corrected): the parent does it directly.
 - Substantive existing-skill edit (a new section, a new pattern table, more than ~10 lines): hand to Claude Code's `skill-creator` skill and run its draft / test / iterate loop.
 - `tune description: <skill path>` (the skill exists but didn't trigger when it should have): hand to `skill-creator` and run its description-optimization loop.
 - `new skill via skill-creator: <kebab-name>`: hand creation to `skill-creator`. Do not invent the shape ad hoc.
 
-If your environment ships a SKILL.md validator, run it on every touched skill before declaring done. Skip this step if it doesn't.
+If your environment ships a SKILL.md validator, run it on every touched skill before declaring done.
 
-### 6. Summarize for the user
+## 6. Summarize for the user
 
 Short list, no preamble:
 
