@@ -41,6 +41,8 @@ It writes `.claude/skills/verify-<app>/`, a project-local skill that teaches age
 
 If you're new to mstack, run it now. An agent that can check its own work keeps going until the check passes. An agent that can't hands every result back to you to check by hand. Of everything in this guide, the verification skill pays off the most.
 
+A second generator covers the cases tests can't reach. Tests check the cases someone thought to write. [`/create-formal-verification-skill`](../../skills/create-formal-verification-skill/SKILL.md) writes a project-local skill that checks one key property of your code, such as "a job never runs twice at once", in every case within a stated scope. Run it when your code has concurrency, retries, a state machine, or a parser, where a bug is costly and tests rarely reach the case that breaks. Otherwise skip it, and run it later if that changes. [Verify and ship](./06-verify-and-ship.md#prove-a-property-with-a-formal-verification-skill) covers it.
+
 ## Keep the cost in check
 
 mstack spends extra tokens on subagents and review panels. That's the price of the rigor. To spend fewer:
