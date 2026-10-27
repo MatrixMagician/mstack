@@ -5,7 +5,7 @@ section before trying, because the obvious approach reports passes that did not 
 
 ## Why this is interactive-only
 
-**`claude -p` cannot run most of these skills.** 36 of mstack's 48 skills are
+**`claude -p` cannot run most of these skills.** 45 of mstack's 57 skills are
 `disable-model-invocation: true`, meaning user-invoked only. Headless mode has no slash-command
 mechanism, so those skills are unreachable and a `/swarm ...` prompt is consumed as plain
 text. Only these 12 are model-invocable:
@@ -15,7 +15,7 @@ poteto-mode  tdd  architect  arena  interrogate  how  why
 deslop  unslop  control-cli  control-ui  typescript-best-practices
 ```
 
-That excludes rows 3, 4, and 6 of the checklist, and the SessionStart hook now fires
+That excludes rows 3, 4, 6, 8, and 9 of the checklist, and the SessionStart hook now fires
 `poteto-mode` on a non-trivial prompt in headless mode without the command being typed.
 
 **The failure is silent, not loud.** A headless `/bro explain this` returned correct, perfectly
@@ -77,6 +77,10 @@ Run `scripts/verify-smoke.sh` from the scratch repo after **each** prompt.
 | 5 | `/deslop sloppy.js` | Narrating comments, unsupported guards and the dead `addLegacy` path are gone; `add`'s behaviour is unchanged |
 | 6 | `/no-comments sloppy.js` | A `Comment Sicko` subagent spawns |
 | 7 | `/control-cli` against any local TUI | Drives it through the tmux harness; installs nothing unsolicited |
+| 8 | `/create-formal-verification-skill sum.js. sumAll must return the sum of every element of its input.` | Writes only under `.claude/skills/`; says no verifier runs on JavaScript and tests the real `sumAll` with generated inputs, not a hand model; the generated skill records the covered file and function and a sync commit; the check is shown failing on a broken variant; while `sum.js` still carries the off-by-one, the run reports the counterexample in the code's terms and leaves `sum.js` unchanged |
+| 9 | `/maintain-formal-verification-skill` after a commit that changes `sumAll` (the row 1 fix is one) | Runs the check as-is before editing anything; reads every commit to `sum.js` since the recorded sync commit; names each check `in sync`, `updated`, `bug`, or `blocked` and says which failures were drift and which were bugs; edits nothing outside the verify skill's directory; moves the sync commit only for a check that is in sync or updated |
+
+Rows 8 and 9 depend on order. Run 8 before 1 to see the finding path, where the property fails on the seeded bug and the run reports it without touching `sum.js`. Run 9 after 1 so there is a commit to `sumAll` for it to read.
 
 Tests 2 and 3 are where the port's model policy is actually on trial: confirm the reported
 `model` values differ across seats. A panel that quietly collapsed onto one tier still produces
@@ -107,6 +111,8 @@ Record the result for each numbered test.
 | 5 | `mstack:deslop` ×8 | Narrating comments and unsupported guards gone; `add` identical on every probed input |
 | 6 | `mstack:no-comments` ×9 | `mstack:Comment Sicko` subagent spawned |
 | 7 | `mstack:control-cli` ×9 | Drove `top` through a tmux harness polling for `PID USER`, confirmed exit `0`, installed nothing, and left the pre-existing session it did not start alone |
+
+Rows 8 and 9 were added on 2026-10-27 with the formal verification skills and have no recorded run yet.
 
 Two rows of this checklist are wrong, and the run is what surfaced them.
 
