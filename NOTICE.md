@@ -45,6 +45,11 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Formal verification from upstream `9f844cd` (v0.15.35).** `create-formal-verification-skill` and
+  `maintain-formal-verification-skill` are new, with the `poteto-help`, guide, `sharpen`, and `swarm`
+  edits that came with them. Not ported: `statechart` (it needs a TLA+ toolchain fetched at run time),
+  `ketchup-video`, `make-bot-ui`, `setup-pstack`, and the `/statechart` pointer in the generated verify
+  skill.
 - **Script fixes from upstream `9f844cd` (v0.15.35).** Four `poteto-mode` script fixes arrive without
   a full sync. `watch-pr` ignores fork heads when it orders a stack and caps each poll sleep at the
   remaining deadline. `orch` prefers a branch's sole open PR over its closed history. `check-plan`
