@@ -45,6 +45,10 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Script fixes from upstream `9f844cd` (v0.15.35).** Four `poteto-mode` script fixes arrive without
+  a full sync. `watch-pr` ignores fork heads when it orders a stack and caps each poll sleep at the
+  remaining deadline. `orch` prefers a branch's sole open PR over its closed history. `check-plan`
+  matches code-span delimiters of equal length. The `101b274` pin below still marks the last full sync.
 - **Synced to upstream `101b274`.** Upstream's v0.15.16 to v0.15.25 work arrives. Three skills
   (`ketchup`, `in-your-own-words`, `sharpen`) are new. `poteto-mode` runs in the chat that receives
   it and `poteto-agent` is a delegate wrapper. Subagent effort matches the job. Four principles are
