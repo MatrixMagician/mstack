@@ -45,6 +45,12 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Skill updates from upstream `ab1f702` (v0.15.35).** `poteto-mode` restates the goal and chains
+  model fallbacks. The autopilot playbooks block a PR only on a shown problem, push each finished
+  unit, and give wording-only changes no verifier. `interrogate` keeps only findings a rerun proves and
+  loses its four reference files. `arena` drops or replaces a rejected seat and may skip the judge.
+  Not ported: the cross-judge family rule (every Claude Code model is one family, so mstack keeps
+  its tier rule), `ketchup-video`, and `setup-pstack`.
 - **Formal verification from upstream `9f844cd` (v0.15.35).** `create-formal-verification-skill` and
   `maintain-formal-verification-skill` are new, with the `poteto-help`, guide, `sharpen`, and `swarm`
   edits that came with them. Not ported: `statechart` (it needs a TLA+ toolchain fetched at run time),
