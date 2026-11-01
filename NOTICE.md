@@ -45,6 +45,9 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Agentic Orchestrate from upstream `c742dd6` (v0.15.36).** The playbook runs on the coordinator's own
+  tools and `scripts/orch/` is deleted, as upstream did (ADR 0003). Verifiers differ by tier, not
+  family, and workers use worktree isolation in place of cloud VMs.
 - **Skill updates from upstream `ab1f702` (v0.15.35).** `poteto-mode` restates the goal and chains
   model fallbacks. The autopilot playbooks block a PR only on a shown problem, push each finished
   unit, and give wording-only changes no verifier. `interrogate` keeps only findings a rerun proves and

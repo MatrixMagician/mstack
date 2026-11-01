@@ -265,7 +265,7 @@ These restore the shipping playbook's invariant — *live surface verification i
 
    **Three defects were found, all of which had passed every static gate** (see the port's git history): `/poteto-mode` was an unknown command because the skill carried a human display name; `generalPurpose` survived in 9 places the gate had no pattern for; and `poteto-agent` could not locate the skill it is named for, degrading silently while still answering plausibly. Tests 2 and 3 are the first real evidence that §5's tier-diversity mitigation produces genuinely different models per seat rather than a collapsed panel. The plugin loads and every component registers (§11.2), but whether the workflows *behave* is unproven and remains the largest open risk in the port.
 
-5. Bundled TypeScript: `bun test orch watch-pr` and `tsc --project watch-pr/tsconfig.json --noEmit --strict` both clean. The nested `package.json` means Claude Code's automatic dependency install does not fire, so `bun install` is a manual first step. Baseline 52 tests; 53 after the review-bot generalisation.
+5. Bundled TypeScript: `bun test` and `tsc --project watch-pr/tsconfig.json --noEmit --strict` both clean. The nested `package.json` means Claude Code's automatic dependency install does not fire, so `bun install` is a manual first step. Baseline 52 tests; 53 after the review-bot generalisation.
 
 6. Link check: no internal Markdown link may dangle after the `setup-pstack` deletion and the `bugbot-triage.md` rename. Exclude `node_modules/`, which `bun install` creates and `.gitignore` covers.
 7. Transcript trio (§7.1) exercised against a real session file — the acceptance bar is correct parsing, not merely finding the directory.
