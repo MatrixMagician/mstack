@@ -53,7 +53,8 @@ export function renderStatusTable(rows: T.NonEmpty<T.PrSnapshot>): string {
   return `${lines.join("\n")}\n`;
 }
 const CONTROL = /(?:\x1b\[|\x9b)[0-?]*[ -/]*[@-~]|[\x00-\x1f\x7f-\x9f]/g;
-const terminalText = (value: string): string => value.replace(CONTROL, "");
+const terminalText = (value: string): string =>
+  value.replace(/[\t\r]/g, " ").replace(CONTROL, "");
 function threadLine(thread: T.ReviewThread): string {
   const comment = thread.firstComment;
   const firstBodyLine = (comment?.body ?? "").split(/\r?\n/, 1)[0] ?? "";
@@ -125,7 +126,7 @@ function renderBlocker(blocker: T.MergeBlocker | StatusQueryBlocker): string {
       return [
         "BLOCKER: status-query",
         `failures=${blocker.failures}`,
-        `detail=${blocker.failure.detail}`,
+        `detail=${terminalText(blocker.failure.detail)}`,
         "action=verify current PR context, GitHub authentication, and API availability, then rearm",
       ].join("\n");
     default: {
@@ -147,7 +148,7 @@ export function renderPretty(event: T.WatcherEvent): string {
     case "ADVANCE":
       return `ADVANCE: merged #${event.merged.number}; next=#${event.frontier.number}; remaining=${event.remaining}\n`;
     case "RETRY":
-      return `RETRY: GitHub status query failed; retrying in ${event.retryInSeconds}s\ndetail=${event.failure.detail}\n`;
+      return `RETRY: GitHub status query failed; retrying in ${event.retryInSeconds}s\ndetail=${terminalText(event.failure.detail)}\n`;
     case "BLOCKER":
       return `${renderBlocker(event.blocker)}\n`;
     case "READY": {
