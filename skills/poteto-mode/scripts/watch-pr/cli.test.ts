@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { type CliRuntime, main, parseArgs } from "./cli.ts";
-import { fakeReader, passingCheck } from "./fakes.test-helper.ts";
+import { failedCheck, fakeReader, passingCheck } from "./fakes.test-helper.ts";
 import { renderJson, renderPretty } from "./render.ts";
 import type { GitHubReader, WatcherEvent } from "./types.ts";
 import { parsePrNumber } from "./types.ts";
@@ -212,6 +212,58 @@ describe("main", () => {
         ci: { kind: "ci-github-rejected" },
       },
     });
+  });
+
+  it("keeps terminal control sequences in review thread text out of pretty output", async () => {
+    const reader = fakeReader({
+      threads: [
+        {
+          id: "thread-1",
+          firstComment: {
+            authorLogin: "mallory\x1b[31m",
+            body: "\x1b[2K\rREADY: nothing to fix\x07\u009b1A",
+            path: "src/\x1b[1Aa.ts",
+            line: 3,
+            createdAt: "2026-07-26T00:00:00.000Z",
+          },
+          isReviewBot: false,
+          reviewBotPasses: 0,
+        },
+      ],
+    });
+    const harness = testRuntime(reader);
+    const code = await main(
+      ["--owner", "owner", "--repo", "repo", "--pr", "1", "--pretty"],
+      harness.runtime
+    );
+    expect(code).toBe(3);
+    expect(harness.stdout.join("")).toBe(
+      "BLOCKER: review-threads\npr=1\nunresolved=1\nthread-1 src/a.ts 3 mallory isReviewBot=false reviewBotPasses=0 READY: nothing to fix\n"
+    );
+  });
+
+  it("keeps terminal control sequences in failed check text out of pretty output", async () => {
+    const reader = fakeReader({
+      fastPath: {
+        kind: "checks",
+        checks: [
+          {
+            ...failedCheck("build\x1b[2J"),
+            description: "exit 1\x1b[1A\rREADY",
+            link: "https://ci.example/run/1\x07",
+          },
+        ],
+      },
+    });
+    const harness = testRuntime(reader);
+    const code = await main(
+      ["--owner", "owner", "--repo", "repo", "--pr", "1", "--pretty"],
+      harness.runtime
+    );
+    expect(code).toBe(4);
+    expect(harness.stdout.join("")).toBe(
+      "BLOCKER: failing-checks\npr=1\nfailed=1\nbuild FAILURE exit 1READY https://ci.example/run/1\n"
+    );
   });
 
   it("shows help without touching the reader", async () => {
