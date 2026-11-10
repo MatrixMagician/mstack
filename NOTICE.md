@@ -45,6 +45,11 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Three missed fixes from upstream `c742dd6` (v0.15.36).** A line check of upstream's `101b274` to
+  `c742dd6` range found three merged fixes that the earlier ports skipped. `ketchup` lists every item
+  that waits on the user and never cuts an item to fit a word count. `reflect` never edits a skill
+  under `plugins/cache/` and copies the skill to `.claude/skills/` first. `typescript-best-practices`
+  makes a brand with a type guard, not with `as`. The `101b274` pin below still marks the last full sync.
 - **Agentic Orchestrate from upstream `c742dd6` (v0.15.36).** The playbook runs on the coordinator's own
   tools and `scripts/orch/` is deleted, as upstream did (ADR 0003). Verifiers differ by tier, not
   family, and workers use worktree isolation in place of cloud VMs.
