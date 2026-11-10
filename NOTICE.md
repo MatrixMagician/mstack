@@ -57,6 +57,7 @@ later upstream improvements are ported by diffing files.
   model fallbacks. The autopilot playbooks block a PR only on a shown problem, push each finished
   unit, and give wording-only changes no verifier. `interrogate` keeps only findings a rerun proves and
   loses its four reference files. `arena` drops or replaces a rejected seat and may skip the judge.
+  Autopilot-stack is Autopilot-full without the merge, and a PR stacks only on a PR it builds on.
   Not ported: the cross-judge family rule (every Claude Code model is one family, so mstack keeps
   its tier rule), `ketchup-video`, and `setup-pstack`.
 - **Formal verification from upstream `9f844cd` (v0.15.35).** `create-formal-verification-skill` and
