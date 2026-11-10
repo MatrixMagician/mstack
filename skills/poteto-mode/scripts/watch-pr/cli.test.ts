@@ -153,6 +153,48 @@ describe("rendering", () => {
   });
 });
 
+describe("pretty rendering of query failures", () => {
+  const failure = {
+    kind: "command-exit",
+    retryable: true,
+    detail: "gh: \x1b[2K\rREADY\x1b[8m rate limited\x07",
+    code: 1,
+  } as const;
+  const base = {
+    schemaVersion: 1,
+    sequence: 1,
+    observedAt: "2026-07-26T00:00:00.000Z",
+    mode: "single",
+  } as const;
+
+  it("keeps terminal control sequences in a retry detail out of pretty output", () => {
+    const retry = {
+      ...base,
+      kind: "RETRY",
+      terminal: false,
+      failure,
+      consecutiveFailures: 1,
+      retryInSeconds: 30,
+    } satisfies WatcherEvent;
+    expect(renderPretty(retry)).toBe(
+      "RETRY: GitHub status query failed; retrying in 30s\ndetail=gh:  READY rate limited\n"
+    );
+  });
+
+  it("keeps terminal control sequences in a status-query blocker detail out of pretty output", () => {
+    const blocker = {
+      ...base,
+      kind: "BLOCKER",
+      terminal: true,
+      exitCode: 7,
+      blocker: { kind: "status-query", failures: 3, failure },
+    } satisfies WatcherEvent;
+    expect(renderPretty(blocker)).toBe(
+      "BLOCKER: status-query\nfailures=3\ndetail=gh:  READY rate limited\naction=verify current PR context, GitHub authentication, and API availability, then rearm\n"
+    );
+  });
+});
+
 describe("main", () => {
   it("returns EX_USAGE 64 and writes usage errors only to stderr", async () => {
     const harness = testRuntime(fakeReader());
@@ -221,7 +263,7 @@ describe("main", () => {
           id: "thread-1",
           firstComment: {
             authorLogin: "mallory\x1b[31m",
-            body: "\x1b[2K\rREADY: nothing to fix\x07\u009b1A",
+            body: "\x1b[2K\rREADY: nothing\tto fix\x07\u009b1A",
             path: "src/\x1b[1Aa.ts",
             line: 3,
             createdAt: "2026-07-26T00:00:00.000Z",
@@ -238,7 +280,7 @@ describe("main", () => {
     );
     expect(code).toBe(3);
     expect(harness.stdout.join("")).toBe(
-      "BLOCKER: review-threads\npr=1\nunresolved=1\nthread-1 src/a.ts 3 mallory isReviewBot=false reviewBotPasses=0 READY: nothing to fix\n"
+      "BLOCKER: review-threads\npr=1\nunresolved=1\nthread-1 src/a.ts 3 mallory isReviewBot=false reviewBotPasses=0  READY: nothing to fix\n"
     );
   });
 
@@ -262,7 +304,7 @@ describe("main", () => {
     );
     expect(code).toBe(4);
     expect(harness.stdout.join("")).toBe(
-      "BLOCKER: failing-checks\npr=1\nfailed=1\nbuild FAILURE exit 1READY https://ci.example/run/1\n"
+      "BLOCKER: failing-checks\npr=1\nfailed=1\nbuild FAILURE exit 1 READY https://ci.example/run/1\n"
     );
   });
 
