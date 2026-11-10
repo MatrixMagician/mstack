@@ -45,6 +45,11 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Two script fixes ahead of upstream.** `watch-pr` no longer attaches a fork PR to the watched stack
+  as a child, and its `--pretty` output drops terminal control sequences from review comments and
+  check names. `log.sh` in `show-me-your-work` writes to a log path that starts with a dash. Upstream
+  has open, unmerged PRs for the fork child, the review comment text, and the dash path. The code
+  here is written for this port.
 - **Three missed fixes from upstream `c742dd6` (v0.15.36).** A line check of upstream's `101b274` to
   `c742dd6` range found three merged fixes that the earlier ports skipped. `ketchup` lists every item
   that waits on the user and never cuts an item to fit a word count. `reflect` never edits a skill

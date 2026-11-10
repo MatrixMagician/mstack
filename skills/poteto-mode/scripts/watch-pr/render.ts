@@ -52,16 +52,19 @@ export function renderStatusTable(rows: T.NonEmpty<T.PrSnapshot>): string {
   }
   return `${lines.join("\n")}\n`;
 }
+const CONTROL = /(?:\x1b\[|\x9b)[0-?]*[ -/]*[@-~]|[\x00-\x1f\x7f-\x9f]/g;
+const terminalText = (value: string): string => value.replace(CONTROL, "");
 function threadLine(thread: T.ReviewThread): string {
   const comment = thread.firstComment;
+  const firstBodyLine = (comment?.body ?? "").split(/\r?\n/, 1)[0] ?? "";
   return [
     thread.id,
-    comment?.path ?? "None",
+    terminalText(comment?.path ?? "None"),
     comment?.line ?? "None",
-    comment?.authorLogin ?? "None",
+    terminalText(comment?.authorLogin ?? "None"),
     `isReviewBot=${thread.isReviewBot}`,
     `reviewBotPasses=${thread.reviewBotPasses}`,
-    (comment?.body ?? "").split(/\r?\n/, 1)[0]?.slice(0, 180) ?? "",
+    terminalText(firstBodyLine).slice(0, 180),
   ].join(" ");
 }
 type StatusQueryBlocker = {
@@ -88,9 +91,10 @@ function renderBlocker(blocker: T.MergeBlocker | StatusQueryBlocker): string {
       ].join("\n");
     case "failing-checks": {
       const failed = blocker.ci.kind === "ci-failing" ? blocker.ci.failed : [];
-      const details = failed.map(
-        (check) =>
+      const details = failed.map((check) =>
+        terminalText(
           `${check.name} ${check.reportedState} ${check.description} ${check.link}`
+        )
       );
       if (blocker.ci.kind === "ci-github-rejected")
         details.push(

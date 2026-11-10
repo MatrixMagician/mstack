@@ -678,13 +678,10 @@ export function orderStack(
   open: readonly T.OpenPullRequest[]
 ): T.NonEmpty<T.PrContext> {
   const byNumber = new Map(open.map((pr) => [pr.number, pr]));
-  // A base ref belongs to this repository. A fork head with the same name
-  // cannot be its parent, even when that name is the default branch.
-  const byHead = new Map(
-    open.filter((pr) => !pr.isCrossRepository).map((pr) => [pr.headRefName, pr])
-  );
+  const local = open.filter((pr) => !pr.isCrossRepository);
+  const byHead = new Map(local.map((pr) => [pr.headRefName, pr]));
   const children = new Map<string, T.OpenPullRequest[]>();
-  for (const pr of open)
+  for (const pr of local)
     children.set(pr.baseRefName, [...(children.get(pr.baseRefName) ?? []), pr]);
   for (const values of children.values())
     values.sort((a, b) => a.number - b.number);
