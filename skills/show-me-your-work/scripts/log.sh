@@ -11,9 +11,9 @@ fi
 logfile="$1"
 shift
 
-logdir="$(dirname "$logfile")"
+logdir="$(dirname -- "$logfile")"
 if [ -n "$logdir" ] && [ "$logdir" != "." ] && [ ! -d "$logdir" ]; then
-	mkdir -p "$logdir"
+	mkdir -p -- "$logdir"
 fi
 
 # Use `>>` here, never `>`. A network mount can fail this test for a log
