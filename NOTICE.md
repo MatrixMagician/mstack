@@ -50,10 +50,12 @@ later upstream improvements are ported by diffing files.
   Autopilot-full and when to pick Autopilot-stack. It pointed at a paragraph that the `ab1f702` port
   removed. Not ported: the `/statechart` and `/ketchup-video` sections of the guide.
 - **Two script fixes ahead of upstream.** `watch-pr` no longer attaches a fork PR to the watched stack
-  as a child, and its `--pretty` output drops terminal control sequences from review comments and
-  check names. `log.sh` in `show-me-your-work` writes to a log path that starts with a dash. Upstream
-  has open, unmerged PRs for the fork child, the review comment text, and the dash path. The code
-  here is written for this port.
+  as a child. Its `--pretty` output removes CSI sequences and control characters from review comment
+  text, failed check text, and query failure details, and it turns a tab or a carriage return into a
+  space. Text inside other escape sequences stays visible as plain text. `log.sh` in
+  `show-me-your-work` writes to a log path that starts with a dash. Upstream has open, unmerged PRs
+  for the fork child, the review comment text, and the dash path. The code here is written for this
+  port.
 - **Three missed fixes from upstream `c742dd6` (v0.15.36).** A line check of upstream's `101b274` to
   `c742dd6` range found three merged fixes that the earlier ports skipped. `ketchup` lists every item
   that waits on the user and never cuts an item to fit a word count. `reflect` never edits a skill
