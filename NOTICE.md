@@ -45,6 +45,10 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Guide wording and the plan playbook rule from upstream `c742dd6` (v0.15.36).** Guide pages 02 to
+  10 take the plain wording of upstream `019a6a2`. The plan playbook states when to pick
+  Autopilot-full and when to pick Autopilot-stack. It pointed at a paragraph that the `ab1f702` port
+  removed. Not ported: the `/statechart` and `/ketchup-video` sections of the guide.
 - **Two script fixes ahead of upstream.** `watch-pr` no longer attaches a fork PR to the watched stack
   as a child, and its `--pretty` output drops terminal control sequences from review comments and
   check names. `log.sh` in `show-me-your-work` writes to a log path that starts with a dash. Upstream
