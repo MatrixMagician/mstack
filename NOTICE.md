@@ -45,7 +45,7 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
-- **Shorter leaf texts from upstream `2f87c85` (v0.15.43).** Thirteen principle leaves, `unslop`, and
+- **Shorter leaf texts from upstream `2f87c85` (v0.15.43).** Fourteen principle leaves, `unslop`, and
   `technical-writing` take upstream's shorter bodies, and each rule keeps its test. `unslop` keeps its
   rule numbers, so a retired rule leaves a gap and rule 14 is still the colon rule. The frontmatter
   and the two port-local paragraphs in `principle-prove-it-works` stay as this port has them.
