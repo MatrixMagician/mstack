@@ -49,7 +49,7 @@ A Claude Code model alias (`fable`, `opus`, `sonnet`, `haiku`) that follows the 
 _Avoid_: model version, slug
 
 **Role**:
-A named kind of spawned agent (`how explorer`, `swarm workers`, `feature, refactoring`) whose tier a skill chooses by default and a user can override with one line.
+A named kind of spawned agent (`arena runners`, `swarm workers`, `feature, refactoring`) whose tier a skill chooses by default and a user can override with one line.
 _Avoid_: persona, agent type
 
 **Effort**:
