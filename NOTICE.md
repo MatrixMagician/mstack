@@ -8,7 +8,7 @@ content from a second plugin, which a fork cannot represent cleanly.
 
 | Component | Upstream | Copyright | Licence |
 |---|---|---|---|
-| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` at `101b274` (v0.15.25), by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
+| Everything except the four skills below | [`cursor/plugins`](https://github.com/cursor/plugins) — `pstack/` at `9e278fe` (v0.15.48), by Lauren Tan ([poteto](https://x.com/poteto)) | © 2026 Lauren Tan | MIT — [`LICENSE`](./LICENSE) |
 | `skills/deslop/`, `skills/control-cli/`, `skills/control-ui/` | [`cursor/plugins`](https://github.com/cursor/plugins) — `cursor-team-kit/skills/` | © 2026 Cursor | MIT — [`LICENSES/cursor-team-kit.LICENSE`](./LICENSES/cursor-team-kit.LICENSE) |
 | Port modifications | this repository | © 2026 Oliver H. | MIT — [`LICENSE`](./LICENSE) |
 
@@ -45,6 +45,13 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Synced to upstream `9e278fe` (v0.15.48).** The pin in the table moves from `101b274` to `9e278fe`.
+  Every `pstack/` commit in that range is ported in a bullet above or listed here as not ported. The
+  `101b274` to `c742dd6` range also had a line check in issues 49 and 55. `/reframe` is new. It
+  teaches the expert words for what the operator is building, borrows terms from neighboring fields,
+  and rewrites the operator's description with them. It runs only when the operator types it. Not
+  ported from `c742dd6` to `9e278fe`: the Gemini panel seat, every model-slug default and the
+  Opus-first routing, `statechart` and its Windows fix, `setup-pstack`, and the benny automations.
 - **Shorter playbooks, `worker.md`, and no Orchestrate from upstream `2f87c85` (v0.15.43).**
   `poteto-mode` takes upstream's short trigger list, Subagents lead, reply paragraph, and playbook
   list, and loses its Comments section. `worker.md` is new. It gives every started agent the
