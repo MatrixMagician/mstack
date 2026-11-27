@@ -45,6 +45,16 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **One-file `why` and `how` from upstream `bf0c7cd` (v0.15.42).** `why` is one short file. It answers
+  from the commits and PR discussions behind the code, cites what the authors wrote, and says what the
+  record does not answer. `how` starts one `Explore` subagent, which has no edit tools, in place of
+  upstream's read-only `generalPurpose` spawn. Both skills lose their reference files and their role
+  lines. `poteto-mode` no longer routes to `how`, and its playbooks, `architect`, `no-comments`, and
+  the Comment Sicko agent trace the code. `recall` starts one `general-purpose` investigator per
+  source, which keeps MCP access. `how` and `why` stay model-invocable so that the SessionStart hook
+  can reach them. Upstream makes them user-invoked only. Not ported: the new default model slugs and
+  the vendor rule for the cross-judge (mstack keeps its tier table and its tier rule), the
+  `statechart` fixes, `setup-pstack`, and the setup page of the guide.
 - **Guide wording and the plan playbook rule from upstream `c742dd6` (v0.15.36).** Guide pages 02 to
   10 take the plain wording of upstream `019a6a2`. The plan playbook states when to pick
   Autopilot-full and when to pick Autopilot-stack. It pointed at a paragraph that the `ab1f702` port
