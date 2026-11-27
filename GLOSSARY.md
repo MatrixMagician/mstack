@@ -57,20 +57,12 @@ How hard a spawned agent reasons, from `low` to `max`. Each tier has a default e
 _Avoid_: thinking budget, reasoning level
 
 **Brief**:
-The complete instruction a spawned agent receives — goal, scope, context, acceptance, verify, timebox, forbidden, report, standing orders. A worker cannot ask a question, so an incomplete brief fails quietly. The brief is the coordinator's product.
+The complete instruction a spawned agent receives — goal, scope, context, acceptance, verify, timebox, forbidden, report. A worker cannot ask a question, so an incomplete brief fails quietly. The brief is the coordinator's product.
 _Avoid_: prompt, spec, task description
-
-**Standing orders**:
-The numbered constraints that apply to every agent in a program, pasted verbatim into every spawn and every resume because directives decay across resumes.
-_Avoid_: preferences, config, rules
 
 **Unit**:
 The smallest piece of program work that carries its own branch, PR, and verdict.
 _Avoid_: task, ticket, item, chunk
-
-**Track**:
-A lane of related units under one owner.
-_Avoid_: workstream, epic, phase
 
 **Wave**:
 A rolling window of concurrently in-flight agents, refilled as children finish rather than run as a blocking batch.
@@ -80,21 +72,9 @@ _Avoid_: batch, round, sprint
 Processing accumulated completions at a chosen point. Completions are queue events, not interrupts.
 _Avoid_: poll, flush, collect
 
-**Inbox**:
-Where completions wait as pointers until the next drain.
-_Avoid_: queue, mailbox
-
-**Ledger**:
-The append-only record of which verdict each unit's head SHA earned, and who produced it.
-_Avoid_: log, registry, audit table
-
 **Gate**:
 A check that must pass before work proceeds — the lint, typecheck, and test run, a regression harness, a safety check ahead of a destructive step. A gate is something an agent can run and read.
 _Avoid_: guard, barrier, hurdle
-
-**Decision gate**:
-A decision only the human can make, parked in durable form so a flood of completions cannot lose it — the question, its options, and what happens on no answer. Always named in full; a bare "gate" is the check above.
-_Avoid_: approval, checkpoint, blocker
 
 **Trail**:
 The auditable record of what was decided and why, written as the run happens so it survives the chat.
