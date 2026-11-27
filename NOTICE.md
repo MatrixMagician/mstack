@@ -46,12 +46,13 @@ later upstream improvements are ported by diffing files.
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
 - **Synced to upstream `9e278fe` (v0.15.48).** The pin in the table moves from `101b274` to `9e278fe`.
-  Every `pstack/` commit in that range is ported in a bullet above or listed here as not ported. The
+  Every `pstack/` commit in that range is ported in a bullet below or listed here as not ported. The
   `101b274` to `c742dd6` range also had a line check in issues 49 and 55. `/reframe` is new. It
   teaches the expert words for what the operator is building, borrows terms from neighboring fields,
   and rewrites the operator's description with them. It runs only when the operator types it. Not
   ported from `c742dd6` to `9e278fe`: the Gemini panel seat, every model-slug default and the
-  Opus-first routing, `statechart` and its Windows fix, `setup-pstack`, and the benny automations.
+  Opus-first routing, `statechart` and its Windows fix, `setup-pstack`, the benny automations, and
+  upstream's own Claude Code adapter doc, `docs/harness/claude-code.md`.
 - **Shorter playbooks, `worker.md`, and no Orchestrate from upstream `2f87c85` (v0.15.43).**
   `poteto-mode` takes upstream's short trigger list, Subagents lead, reply paragraph, and playbook
   list, and loses its Comments section. `worker.md` is new. It gives every started agent the
@@ -99,7 +100,8 @@ later upstream improvements are ported by diffing files.
   `c742dd6` range found three merged fixes that the earlier ports skipped. `ketchup` lists every item
   that waits on the user and never cuts an item to fit a word count. `reflect` never edits a skill
   under `plugins/cache/` and copies the skill to `.claude/skills/` first. `typescript-best-practices`
-  makes a brand with a type guard, not with `as`. The `101b274` pin below still marks the last full sync.
+  makes a brand with a type guard, not with `as`. The `101b274` pin below then marked the last
+  full sync.
 - **Agentic Orchestrate from upstream `c742dd6` (v0.15.36).** The playbook runs on the coordinator's own
   tools and `scripts/orch/` is deleted, as upstream did (ADR 0003). Verifiers differ by tier, not
   family, and workers use worktree isolation in place of cloud VMs.
@@ -118,7 +120,8 @@ later upstream improvements are ported by diffing files.
 - **Script fixes from upstream `9f844cd` (v0.15.35).** Four `poteto-mode` script fixes arrive without
   a full sync. `watch-pr` ignores fork heads when it orders a stack and caps each poll sleep at the
   remaining deadline. `orch` prefers a branch's sole open PR over its closed history. `check-plan`
-  matches code-span delimiters of equal length. The `101b274` pin below still marks the last full sync.
+  matches code-span delimiters of equal length. The `101b274` pin below then marked the last
+  full sync.
 - **Synced to upstream `101b274`.** Upstream's v0.15.16 to v0.15.25 work arrives. Three skills
   (`ketchup`, `in-your-own-words`, `sharpen`) are new. `poteto-mode` runs in the chat that receives
   it and `poteto-agent` is a delegate wrapper. Subagent effort matches the job. Four principles are
