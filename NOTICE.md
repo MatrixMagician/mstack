@@ -50,7 +50,7 @@ later upstream improvements are ported by diffing files.
   days. It routes to `figure-it-out` even when a narrower playbook fits. Upstream's sentence names
   that route last. On `evals/program-routing`, upstream's sentence opened `figure-it-out` first in
   0 of 10 runs and a narrower playbook in 8. The sentence here opened `figure-it-out` first in 10 of
-  10. Keep it when a sync touches the Playbooks paragraph.
+  10. `skill-rules.test.mjs` pins the sentence so a sync cannot drop it.
 - **Synced to upstream `9e278fe` (v0.15.48).** The pin in the table moves from `101b274` to `9e278fe`.
   Every `pstack/` commit in that range is ported in a bullet below or listed here as not ported. The
   `101b274` to `c742dd6` range also had a line check in issues 49 and 55. `/reframe` is new. It

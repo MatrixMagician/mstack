@@ -18,6 +18,7 @@ const rules = [
   { source: '#12 quote the failure content', file: 'tdd/SKILL.md', phrase: 'Quote the failure content' },
   { source: '#12 search the places the rules name', file: 'recall/SKILL.md', phrase: "A search that skips a place the project's rules name is not exhausted." },
   { source: '#12 blast-radius before design', file: 'blast-radius/SKILL.md', phrase: 'a brief that asserts something about existing code' },
+  { source: '#67 check scale before matching a playbook', file: 'poteto-mode/SKILL.md', phrase: 'Before you match a playbook, check scale.' },
 ];
 
 describe('port-local skill rules', () => {
