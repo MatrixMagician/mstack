@@ -11,7 +11,7 @@ A directory under `skills/` holding a `SKILL.md` the agent reads in full when it
 _Avoid_: command, tool, prompt
 
 **Mode**:
-A skill that stays in effect across turns instead of running once. `poteto-mode` is the only mode mstack ships; a user can author their own. Unqualified, "mode" always means this. The two narrower senses are always qualified: a **babysit mode** (`drive`, `background`, `threads-only`, `check`) is how much authority a babysit run has, and a **watch mode** (`single`, `stack`, `queued-stack`) is what the watcher is pointed at.
+A skill that stays in effect across turns instead of running once. `poteto-mode` is the only mode mstack ships; a user can author their own. Unqualified, "mode" always means this. The two narrower senses are always qualified: a **babysit mode** (`drive`, `threads-only`, `check`) is how much authority a babysit run has, and a **watch mode** (`single`, `stack`, `queued-stack`) is what the watcher is pointed at.
 _Avoid_: persona, style, profile
 
 **Principle**:

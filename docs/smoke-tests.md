@@ -70,7 +70,7 @@ Run `scripts/verify-smoke.sh` from the scratch repo after **each** prompt.
 
 | # | Prompt | Passes when |
 |---|---|---|
-| 1 | `/poteto-mode sum.js drops the last element. repro first, then fix and verify.` | First todo is "read the Principles section"; the Bug-fix playbook's steps are copied in verbatim; a skipped step stays listed as `skip: <reason>`; the fix is proven by running it, not asserted |
+| 1 | `/poteto-mode sum.js drops the last element. repro first, then fix and verify.` | The Bug-fix playbook's steps are copied into the todolist; the fix is proven by running it, not asserted |
 | 2 | `/arena two designs for a safer sumAll. compare them.` | Three runners on `fable`, `opus`, `sonnet` — not three of one tier; each writes to its own path; a cross-judge runs after all candidates finish, not alongside |
 | 3 | `/swarm check both js files for off-by-ones. one worker each.` | Workers spawn on `haiku` with `isolation: "worktree"`; one aggregated verdict |
 | 4 | `/create-verification-skill` | Writes to `.claude/skills/verify-<app>/` and nowhere else — the upstream skill targeted an editor-specific directory, so confirm the path rather than assuming the remap took; produces a feature map |
