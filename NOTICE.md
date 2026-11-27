@@ -45,6 +45,12 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Program routing ahead of upstream.** `poteto-mode` checks scale before it matches a playbook. A
+  program is one goal that the agent breaks into many PRs, across many packages or over several
+  days. It routes to `figure-it-out` even when a narrower playbook fits. Upstream's sentence names
+  that route last. On `evals/program-routing`, upstream's sentence opened `figure-it-out` first in
+  0 of 10 runs and a narrower playbook in 8. The sentence here opened `figure-it-out` first in 10 of
+  10. Keep it when a sync touches the Playbooks paragraph.
 - **Synced to upstream `9e278fe` (v0.15.48).** The pin in the table moves from `101b274` to `9e278fe`.
   Every `pstack/` commit in that range is ported in a bullet below or listed here as not ported. The
   `101b274` to `c742dd6` range also had a line check in issues 49 and 55. `/reframe` is new. It
