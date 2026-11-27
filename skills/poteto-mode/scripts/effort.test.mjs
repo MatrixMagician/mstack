@@ -42,7 +42,7 @@ test('the effort rule covers the suffix override and inherited models', () => {
 
 test('every skill that reads a role line points at the tier table', () => {
   const readers = roleLineReaders();
-  assert.ok(readers.length >= 3, `found only ${readers.length} role-line readers: ${readers}`);
+  assert.ok(readers.length >= 4, `found only ${readers.length} role-line readers: ${readers}`);
   for (const skill of readers) {
     assert.ok(read(`skills/${skill}/SKILL.md`).includes(POINTER), `${skill} lacks the effort pointer`);
   }

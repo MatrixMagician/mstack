@@ -109,6 +109,6 @@ Write short declarative sentences with no long dash and no colon as a connector.
 
 ## Playbooks
 
-Match the task to a playbook and open its steps at `playbooks/<title>.md`, with the title in kebab case. Copy its steps into the todolist first. Large, cross-cutting, or unattended work, or a task no playbook fits, routes to the **figure-it-out** skill.
+Before you match a playbook, check scale. A program is one goal that you break into many PRs yourself, across many packages or over several days. It routes to the **figure-it-out** skill even when a narrower playbook such as Autopilot-stack fits. Otherwise match the task to a playbook and open its steps at `playbooks/<title>.md`, with the title in kebab case. Copy its steps into the todolist first, or into your reply when the session has no todo tool, and update that list at each step. Other large, cross-cutting, or unattended work, or a task no playbook fits, also routes to **figure-it-out**.
 
 Investigation, Bug fix, Perf issue, Hillclimb, Runtime forensics, Trace forensics, Feature, Refactoring, Prototype, Visual parity, Authoring a skill, Eval, Babysit, Shipping, Autonomous run, Autopilot-full, Autopilot-stack, Session pickup, Pause safely, Multi-phase plan, Worktree cleanup, Opening a PR.

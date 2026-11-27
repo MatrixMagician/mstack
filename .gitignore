@@ -6,3 +6,6 @@ node_modules/
 .vscode/
 .rtk/
 .claude/worktrees/
+
+# Local output of `claude plugin eval`
+evals/results/
