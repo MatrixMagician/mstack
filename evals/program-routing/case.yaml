@@ -1,0 +1,36 @@
+schema_version: "1.0"
+name: program-routing
+description: >
+  A user hands poteto-mode a multi-day migration across twelve packages that
+  lands as many PRs, reviewed after they step away. In its first turns the run
+  should open the figure-it-out skill and no playbook under playbooks/.
+  figure-it-out sets disable-model-invocation, so a Read of its SKILL.md is the
+  only way a run can load it. Run with --scaffold so the workspace holds the
+  monorepo the prompt names, and with --ablation none.
+tags: [poteto-mode, playbooks]
+runs: 10
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 10
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill]
+  disallowed_tools: [Agent]
+  prompt: >
+    /poteto-mode move every package under packages/ off the legacy @acme/store
+    and onto @acme/store-next. there are twelve of them and they depend on each
+    other, so i expect this to take a few days and land as a lot of PRs, at
+    least one per package. own the whole thing. i'm stepping away and will
+    review the PRs when i check back in, a couple of times a day.
+graders:
+  - type: tool_used
+    name: opens-figure-it-out
+    tool: Read
+    input_match: 'figure-it-out/SKILL\.md'
+    min: 1
+  - type: tool_used
+    name: opens-no-playbook
+    tool: Read
+    input_match: 'playbooks/[a-z-]+\.md'
+    min: 0
+    max: 0
