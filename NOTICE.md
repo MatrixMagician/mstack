@@ -45,6 +45,10 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Follow-ups from the `9e278fe` sync (issue 67).** `how` spawns its `Explore` subagent on the
+  `judgment and prose` line, default `fable`. When a session has no todo tool, `poteto-mode` keeps the
+  playbook steps in the reply, as upstream's Claude Code adapter does. The README playbook table,
+  guide page 04, SPEC.md, and the smoke tests match the synced skills.
 - **Program routing ahead of upstream.** `poteto-mode` checks scale before it matches a playbook. A
   program is one goal that the agent breaks into many PRs, across many packages or over several
   days. It routes to `figure-it-out` even when a narrower playbook fits. Upstream's sentence names
@@ -86,8 +90,9 @@ later upstream improvements are ported by diffing files.
   record does not answer. `how` starts one `Explore` subagent, which has no edit tools, in place of
   upstream's read-only `generalPurpose` spawn. Both skills lose their reference files and their role
   lines. `poteto-mode` no longer routes to `how`, and its playbooks, `architect`, `no-comments`, and
-  the Comment Sicko agent trace the code. `sharpen`'s rewrite asks the agent to prototype any choice an
-  experiment can settle, and `teach` and `blast-radius` stop pointing at parts `why` lost. `recall` starts one `general-purpose` investigator per
+  the Comment Sicko agent trace the code. `sharpen`'s rewrite asks the agent to prototype any choice
+  an experiment can settle, and `teach` and `blast-radius` stop pointing at parts `why` lost. `recall`
+  starts one `general-purpose` investigator per
   source, which keeps MCP access. `how` and `why` stay model-invocable so that the SessionStart hook
   can reach them. Upstream makes them user-invoked only. Not ported: the new default model slugs and
   the vendor rule for the cross-judge (mstack keeps its tier table and its tier rule), the
