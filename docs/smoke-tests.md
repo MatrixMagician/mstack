@@ -25,8 +25,8 @@ would have scored it a pass. This is the **principle-prove-it-works** failure th
 warns about, so verify against the transcript (below), never against the reply.
 
 `claude plugin eval` is the right tool for this and would remove the manual work entirely — case
-files, LLM graders, a no-plugin baseline arm, cost ceilings. It is currently early-access gated.
-Re-check `claude plugin eval --help`; if it runs for you, prefer it and replace this document.
+files, LLM graders, a no-plugin baseline arm, cost ceilings. It runs now, and `evals/program-routing/`
+is the first case. Issue 69 moves these rows onto it.
 
 ## Set up a scratch repo
 
