@@ -80,7 +80,8 @@ later upstream improvements are ported by diffing files.
   record does not answer. `how` starts one `Explore` subagent, which has no edit tools, in place of
   upstream's read-only `generalPurpose` spawn. Both skills lose their reference files and their role
   lines. `poteto-mode` no longer routes to `how`, and its playbooks, `architect`, `no-comments`, and
-  the Comment Sicko agent trace the code. `recall` starts one `general-purpose` investigator per
+  the Comment Sicko agent trace the code. `sharpen`'s rewrite asks the agent to prototype any choice an
+  experiment can settle, and `teach` and `blast-radius` stop pointing at parts `why` lost. `recall` starts one `general-purpose` investigator per
   source, which keeps MCP access. `how` and `why` stay model-invocable so that the SessionStart hook
   can reach them. Upstream makes them user-invoked only. Not ported: the new default model slugs and
   the vendor rule for the cross-judge (mstack keeps its tier table and its tier rule), the
