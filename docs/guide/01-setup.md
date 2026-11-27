@@ -25,7 +25,7 @@ arena runners: fable, opus, sonnet
 interrogate reviewers: fable, opus, sonnet
 ```
 
-The other role lines are `arena cross-judge`, `architect runners`, `reflect judgment, divergent, synthesizer`, `reflect tooling`, `feature, refactoring`, `bug-fix`, `perf-issue`, `hillclimb`, `hardest tasks`, and `judgment and prose`. Each skill names the line it reads.
+The other role lines are `arena cross-judge`, `feature, refactoring`, `bug-fix`, `perf-issue`, `hillclimb`, `hardest tasks`, and `judgment and prose`. Each skill names the line it reads.
 
 You only override what you care about. A role with no line keeps the skill's default; delete a line to restore it. Set a role to `inherit-parent` or `auto` and mstack omits the subagent `model` field, so the subagent inherits your parent chat model. Both values mean the same thing, and neither is a model name. For a panel role the value is a list, and one subagent runs per entry, so the list length sets the panel size.
 
@@ -60,7 +60,7 @@ Pick something real but small, and describe it the way you'd describe it to a co
 /poteto-mode add a --json flag to this command. text output stays byte-identical. verify both.
 ```
 
-Watch the todo list. Its first items are the matched playbook's steps copied in, the Feature playbook for this prompt. If `/poteto-mode` skips a step, the step stays in the list with `skip: <reason>`, so you can see what it chose not to do.
+Watch the todo list. Its first items are the matched playbook's steps copied in, the Feature playbook for this prompt.
 
 From here you can type normal follow-ups. `/poteto-mode` is the session default. A `SessionStart` hook re-asserts it at session start, on resume, after `/clear`, and after compaction, so you rarely need to type it. Opt out by saying so, or delete the installed `hooks/hooks.json` to turn the hook off. A second hook, on `PreToolUse`, denies a `mstack:poteto-agent` spawn that omits `model` or `effort` and tells the orchestrator which values to send.
 

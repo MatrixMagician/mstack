@@ -45,6 +45,22 @@ later upstream improvements are ported by diffing files.
   non-trivial work into `mstack:poteto-mode`. The skills that block names are model-invocable so the
   Skill tool can reach them; the `principle-*` leaves stay user-invoked only. The approach follows
   [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude) (MIT).
+- **Shorter playbooks, `worker.md`, and no Orchestrate from upstream `2f87c85` (v0.15.43).**
+  `poteto-mode` takes upstream's short trigger list, Subagents lead, reply paragraph, and playbook
+  list, and loses its Comments section. `worker.md` is new. It gives every started agent the
+  operator's rules, and `poteto-mode` makes its absolute path the first line of every kickoff. The
+  Orchestrate playbook is deleted, and program-scale work routes to `figure-it-out` (ADR 0004, which
+  supersedes ADR 0003). `opening-a-pr` is three paragraphs plus the rule to stop live agents,
+  `babysit` is six rules, and `multi-phase-plan` is five steps that never run `check-plan.mjs`, so
+  the script and its test are deleted. `reflect` is one file with no subagents. `architect` is a
+  short brief that sends a large design to `arena`. Both lose their reference files and their role
+  lines. `arena` states its runner and cross-judge steps in fewer words and keeps its tier rules.
+- **Not ported from upstream `2f87c85`: the model routing.** The Opus-first defaults, the Fable
+  exception, the xhigh cap, the `-fast` slug rule, the `# defaults: 3` marker, the second opinion
+  from another vendor, and the model pin in `poteto-agent` stay out. mstack's routing is tier
+  aliases that it owns, so it keeps its Effort by tier table, the `.claude/rules/mstack-models.md`
+  override, its tier defaults, and its tier rules for panels and the cross-judge. `setup-pstack` and
+  the guide section on running many projects are not ported either.
 - **Shorter leaf texts from upstream `2f87c85` (v0.15.43).** Fourteen principle leaves, `unslop`, and
   `technical-writing` take upstream's shorter bodies. Upstream cut some rules along with the longer text,
   such as the persisted-state rule in `principle-fix-root-causes`, and the port takes those cuts.
